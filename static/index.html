@@ -44,18 +44,21 @@
 	<!-- Delete everything in this .container and get started on your own site! -->
 
 	<div class="container">
-        <header>
-            <a href="/" class="fifteen columns"><h1 class="remove-bottom">Trailer Tracker</h1></a>
-            <a href="/login" class="login one columns">Log in</a>
-        </header>
-		<div class="sixteen columns">
+        <header class="sixteen columns">
+            <a href="/"><h1 class="remove-bottom">Trailer Tracker</h1></a>
+            <a href="/login" class="login button">Log in</a>
+            <form action="/logout" method="post">
+                <button class="login remove-bottom" type="submit">Log out</button>
+            </form>
 			<hr />
-		</div>
-        <div class="three columns offset-by-five">
-            <a href="#" class="button">Add your trailer</a>
-        </div>
-        <div class="three columns">
-            <a href="#" class="button">Discuss</a>
+        </header>
+        <div class="actions">
+            <div class="three columns offset-by-five">
+                <a href="#" class="button">Add your trailer</a>
+            </div>
+            <div class="three columns">
+                <a href="#" class="button">Discuss</a>
+            </div>
         </div>
 		<div class="sixteen columns" id="map" style="height: 40em; background-color: green;">
 		</div>

@@ -16,12 +16,14 @@
 
 /* #Site Styles
 ================================================== */
-.button { width: 80%; margin-left: 10%; margin-right: 10%; text-align: center; }
 footer { text-align: center; }
-header .login { margin-top: 2em; }
+header .login, header .logout { margin-top: 1em; float: right; }
+header h1 { float: left; }
+.button { text-align: center; }
 
 /* #Page Styles
 ================================================== */
+.actions .button { width: 80%; margin-left: 10%; margin-right: 10%; }
 
 /* #Media Queries
 ================================================== */
