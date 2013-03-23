@@ -18,6 +18,7 @@
 ================================================== */
 .button { width: 80%; margin-left: 10%; margin-right: 10%; text-align: center; }
 footer { text-align: center; }
+header .login { margin-top: 2em; }
 
 /* #Page Styles
 ================================================== */
