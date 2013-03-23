@@ -17,8 +17,10 @@
 /* #Site Styles
 ================================================== */
 footer { text-align: center; }
-header h1 { float: left; }
 .button { text-align: center; }
+header h1 { float: left; }
+header .account { float: right; }
+header .account button { margin: 0; }
 
 /* #Page Styles
 ================================================== */
