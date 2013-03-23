@@ -17,7 +17,6 @@
 /* #Site Styles
 ================================================== */
 footer { text-align: center; }
-header .login, header .logout { margin-top: 1em; float: right; }
 header h1 { float: left; }
 .button { text-align: center; }
 
