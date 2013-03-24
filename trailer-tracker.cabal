@@ -20,4 +20,6 @@ executable trailer-tracker
   hs-source-dirs:      src
   main-is:             Main.hs
   -- other-modules:       
-  build-depends:       base ==4.6.*
+  build-depends:       base   == 4.6.*
+                     , heist  >= 0.11.0.1
+                     , snap   >= 0.11.2
