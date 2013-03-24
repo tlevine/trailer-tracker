@@ -1,7 +1,7 @@
 import Snap
 import Snap.Snaplet.Heist
 import Snap.Util.FileServe
--- import Snap.Extras.CoreUtils
+import Snap.Extras.CoreUtils
 -- import Snap.Extras.TextUtils
 import Control.Lens
 -- import Data.Text
@@ -9,8 +9,9 @@ import Control.Lens
 import Data.Monoid
 import Heist.Interpreted
 
-data TT = TT { _heist :: Snaplet (Heist TT)
-             }
+data TT
+  = TT { _heist :: Snaplet (Heist TT)
+       }
 makeLenses ''TT
 
 instance HasHeist TT where
