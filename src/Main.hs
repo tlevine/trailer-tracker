@@ -21,9 +21,13 @@ indexHandler :: Handler TT TT ()
 indexHandler = do
   render "index"
 
-observeHandler :: Handler TT TT ()
-observeHandler = do
-  render "observe"
+questionnaireHandler :: Handler TT TT ()
+questionnaireHandler = do
+  render "questionnaire"
+
+observationHandler :: Handler TT TT ()
+observationHandler = do
+  render "observation"
 
 ttInit :: SnapletInit TT TT
 ttInit = makeSnaplet "Trailer Tracker" "Track inhabitable FEMA trailers" Nothing $ do
@@ -31,7 +35,8 @@ ttInit = makeSnaplet "Trailer Tracker" "Track inhabitable FEMA trailers" Nothing
   -- modifyHeistState $ bindAttributeSplices [("main-textbox", mainTextboxAttributeSplice)]
   addRoutes [ ("images", serveDirectory "static/images")
             , ("stylesheets", serveDirectory "static/stylesheets")
-            , ("observe", observeHandler)
+            , ("questionnaires/a", questionnaireHandler)
+            , ("observations/a", observationHandler)
             , ("", indexHandler)
             ]
   return $ TT { _heist = h
