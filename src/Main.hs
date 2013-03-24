@@ -21,12 +21,17 @@ indexHandler :: Handler TT TT ()
 indexHandler = do
   render "index"
 
+observeHandler :: Handler TT TT ()
+observeHandler = do
+  render "observe"
+
 ttInit :: SnapletInit TT TT
 ttInit = makeSnaplet "Trailer Tracker" "Track inhabitable FEMA trailers" Nothing $ do
   h <- nestSnaplet "heist" heist $ heistInit "templates"
   -- modifyHeistState $ bindAttributeSplices [("main-textbox", mainTextboxAttributeSplice)]
   addRoutes [ ("images", serveDirectory "static/images")
             , ("stylesheets", serveDirectory "static/stylesheets")
+            , ("observe", observeHandler)
             , ("", indexHandler)
             ]
   return $ TT { _heist = h
