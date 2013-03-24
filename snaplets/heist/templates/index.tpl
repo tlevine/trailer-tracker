@@ -4,7 +4,7 @@
             <a href="/observations/a" class="button">Add a trailer</a>
         </div>
         <div class="one-third column">
-            <a href="/questionnaire/a" class="button">Report symptoms</a>
+            <a href="/questionnaires/a" class="button">Report symptoms</a>
         </div>
         <div class="one-third column">
             <a href="#" class="button">Discuss</a>
