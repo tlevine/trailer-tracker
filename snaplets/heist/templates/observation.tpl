@@ -1,4 +1,5 @@
 <apply template="_base">
+  <div class="sixteen columns">
     <form action="">
       
       <!-- Label and select list -->
@@ -55,4 +56,5 @@
       <button type="submit">Submit Form</button>
      
     </form>
+  </div>
 </apply>

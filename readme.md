@@ -33,3 +33,20 @@ making the map. Unless otherwise specified, all pages return HTML.
 
 Some of these respond differently depending on whether you're logged in.
 Also, it's not entirely set.
+
+## Notes
+text for the start page?
+Welcome to Trailer Tracker! 
+This website provides consumer information relating 
+to the indoor air quality issues of mobile or modular homes.
+
+The baseline data comes from the federal government
+ but we need users like you to add  your own knowledge 
+ for the benefit of the community. 
+
+     Then below it, and flanked by two sets of thin parallel lines was the following text in slightly larger font:
+
+     To get started:
+      click on “TRACKER” in the menu 
+      at the top of the screen.
+
