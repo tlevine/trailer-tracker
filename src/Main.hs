@@ -9,5 +9,19 @@ import Data.Text.Encoding
 import Data.Monoid
 import Heist.Interpreted
 
+memoiseInit :: SnapletInit TT TT
+memoiseInit = makeSnaplet "Trailer Tracker" "Track inhabitable FEMA trailers" Nothing $ do
+  h <- nestSnaplet "heist" heist $ heistInit "templates"
+  -- modifyHeistState $ bindAttributeSplices [("main-textbox", 
+mainTextboxAttributeSplice)]
+  addRoutes [ ("images", serveDirectory "static/images")
+            , ("stylesheets", serveDirectory "static/stylesheets")
+            , ("", indexHandler)
+            ]
+  return $ Memoise { _heist = h
+                   }
+
+main :: IO ()
 main = do
-  putStrLn "a"
+  (_, site, _) <- runSnaplet Nothing memoiseInit
+  quickHttpServe site
