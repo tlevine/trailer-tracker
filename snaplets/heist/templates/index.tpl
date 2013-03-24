@@ -1,10 +1,10 @@
 <apply template="_base">
     <div class="actions">
         <div class="one-third column">
-            <a href="/trailers" class="button">Add a trailer</a>
+            <a href="/observations/a" class="button">Add a trailer</a>
         </div>
         <div class="one-third column">
-            <a href="/symptoms" class="button">Report symptoms</a>
+            <a href="/questionnaire/a" class="button">Report symptoms</a>
         </div>
         <div class="one-third column">
             <a href="#" class="button">Discuss</a>
