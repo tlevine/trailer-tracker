@@ -18,18 +18,18 @@ making the map. Unless otherwise specified, all pages return HTML.
     POST   /login
     GET    /logout
     POST   /logout
-    GET    /me                 ->  View information about your user account.
-    POST   /me                 ->  Edit information about your user account.
+    GET    /me                   ->  View information about your user account.
+    POST   /me                   ->  Edit information about your user account.
 
     GET    /questionnaires       ->  View a JSON list of all questionnaire data.
     GET    /questionnaire/:uuid  ->  View an questionnaire.
     PUT    /questionnaire/:uuid  ->  Answer more questionnaire questions.
     POST   /questionnaire/:uuid  ->  Create an questionnaire.
 
-    GET    /observations       ->  View a JSON list of all observation data.
-    GET    /observation/:uuid  ->  View an observation.
-    PUT    /observation/:uuid  ->  Edit an observation.
-    POST   /observation/:uuid  ->  Create an observation.
+    GET    /observations         ->  View a JSON list of all observation data.
+    GET    /observation/:uuid    ->  View an observation.
+    PUT    /observation/:uuid    ->  Edit an observation.
+    POST   /observation/:uuid    ->  Create an observation.
 
 Some of these respond differently depending on whether you're logged in.
 Also, it's not entirely set.
