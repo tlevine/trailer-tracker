@@ -1,5 +1,3 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 import Snap
 import Snap.Snaplet.Heist
 import Snap.Util.FileServe

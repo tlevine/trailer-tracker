@@ -26,4 +26,8 @@ executable trailer-tracker
                      , snap-core    >= 0.9.3.1
 --                   , snap-extras  >= 0.4
                      , lens         >= 3.7.0.1
-
+--                   , text         >= 0.11
+  extensions: OverloadedStrings
+            , TemplateHaskell
+--          , FlexibleInstances
+--          , ScopedTypeVariables
