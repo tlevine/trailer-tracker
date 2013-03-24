@@ -2,20 +2,22 @@
 -- documentation, see http://haskell.org/cabal/users-guide/
 
 name:                trailer-tracker
-version:             0.1.0.0
+version:             0.0.1
 synopsis:            Track FEMA trailers.
--- description:         
 homepage:            trailertracker.org
 license:             MIT
 license-file:        LICENSE
 author:              Thomas Levine
 maintainer:          occurrence@thomaslevine.com
--- copyright:           
+copyright:           Thomas Levine
 category:            Web
 build-type:          Simple
 cabal-version:       >=1.8
+description:
+  Trailer tracker is a website where people living in inhabitable FEMA trailers collect their stories.
 
 executable trailer-tracker
-  -- main-is:             
+  hs-source-dirs:      src
+  main-is:             Main.hs
   -- other-modules:       
   build-depends:       base ==4.6.*
