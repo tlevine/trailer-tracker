@@ -19,8 +19,12 @@ makeLenses ''TT
 instance HasHeist TT where
   heistLens = subSnaplet heist
 
-memoiseInit :: SnapletInit TT TT
-memoiseInit = makeSnaplet "Trailer Tracker" "Track inhabitable FEMA trailers" Nothing $ do
+indexHandler :: Handler TT TT ()
+indexHandler = do
+  render "index"
+
+ttInit :: SnapletInit TT TT
+ttInit = makeSnaplet "Trailer Tracker" "Track inhabitable FEMA trailers" Nothing $ do
   h <- nestSnaplet "heist" heist $ heistInit "templates"
   -- modifyHeistState $ bindAttributeSplices [("main-textbox", mainTextboxAttributeSplice)]
   addRoutes [ ("images", serveDirectory "static/images")
@@ -32,5 +36,5 @@ memoiseInit = makeSnaplet "Trailer Tracker" "Track inhabitable FEMA trailers" No
 
 main :: IO ()
 main = do
-  (_, site, _) <- runSnaplet Nothing memoiseInit
+  (_, site, _) <- runSnaplet Nothing ttInit
   quickHttpServe site
