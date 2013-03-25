@@ -20,6 +20,9 @@ instance HasHeist TT where
 
 type Answer k = (Datetime, k)
 
+type Question = (String, String -> k) ???
+How do people automatically generate forms in Snap???
+
 -- Saved
 type QuestionnaireTable = M.Map UUID Questionnaire
 type Questionnaire = M.Map String Answer
