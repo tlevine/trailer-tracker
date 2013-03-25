@@ -24,6 +24,16 @@ type Answer k = (Datetime, k)
 type QuestionnaireTable = M.Map UUID Questionnaire
 type Questionnaire = M.Map String Answer
 
+inactiveObservationQuestions = [
+                               ]
+activeObservationQuestions   = [
+                               ]
+
+inactiveSymptomQuestions = [
+                           ]
+activeSymptomQuestions   = [(),
+                           ]
+
 observationQuestionnaire = M.fromList $ inactiveObservationQuestions ++ activeObservationQuestions
 symptomQuestionnaire = M.fromList $ inactiveSymptomQuestions ++ activeSymptomQuestions
 
