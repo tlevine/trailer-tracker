@@ -17,6 +17,16 @@ makeLenses ''TT
 instance HasHeist TT where
   heistLens = subSnaplet heist
 
+
+type Answer k = (Datetime, k)
+
+-- Saved
+type QuestionnaireTable = M.Map UUID Questionnaire
+type Questionnaire = M.Map String Answer
+
+observationQuestionnaire = M.fromList $ inactiveObservationQuestions ++ activeObservationQuestions
+symptomQuestionnaire = M.fromList $ inactiveSymptomQuestions ++ activeSymptomQuestions
+
 indexHandler :: Handler TT TT ()
 indexHandler = do
   render "index"
