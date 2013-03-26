@@ -15,8 +15,8 @@ import Control.Lens
 -- import Data.Text.Encoding
 import Data.Monoid
 
-import Data.UUID.V1 (nextUUID)
-import Data.UUID    (toString)
+import Data.UUID.V4 (nextRandom)
+import qualified Data.UUID as U
 
 type Datetime = Integer
 type Snapthingy = ()
@@ -46,7 +46,7 @@ type QuestionListener = QuestionAnswer -> String -> QuestionAnswer
 
 -- Saved
 type Questionnaire      = M.Map String QuestionAnswer
-type QuestionnaireTable = M.Map UUID Questionnaire
+type QuestionnaireTable = M.Map U.UUID Questionnaire
 
 -- Make an unanswered question/answer
 toQA :: String -> String -> QuestionResponse -> (String, QuestionAnswer)
@@ -123,10 +123,7 @@ ttInit = makeSnaplet "Trailer Tracker" "Track inhabitable FEMA trailers" Nothing
 
 main :: IO ()
 main = do
---uuid <- nextUUID
---putStrLn $ show uuid
---uuidstr <- case uuid of
---  Nothing -> "oops"
---  Just UUID -> toString uuid
+  uuid <- nextRandom
+  putStrLn $ show uuid
   (_, site, _) <- runSnaplet Nothing ttInit
   quickHttpServe site
