@@ -19,11 +19,10 @@ instance HasHeist TT where
 
 
 -- Question text, datetime, result
-type QuestionAnswer a = (String, a)
-type DatestampedQuestionAnswer a = (String, Datetime, a)
+type QuestionAnswer a = (String, Maybe Datetime, a)
 
 -- These are the a types for the question/answer. They present the question too
-type Radio = ([String], [String], [String])
+type Radio = ([String], Maybe String, [String])
 type Checkbox = M.Map String Bool
 type Textbox = String
 
@@ -37,11 +36,15 @@ type Questionnaire      = M.Map String QuestionAnswer
 
 -- Make a question/answer
 toQA :: String -> String -> a -> QuestionAnswer a
-toQA short_name question responses = (short_name, (question, responses))
+toQA short_name question responses = (short_name, (question, Nothing, responses))
 
 -- Make a check box thingy.
 toCheckbox :: [String] -> Checkbox
 toCheckbox choices = M.fromList $ map (\c -> (c, False)) choices
+
+-- Make a radio button thingy.
+toCheckbox :: [String] -> Radio
+toCheckbox choices = (choices, Nothing, [])
 
 inactiveObservationQuestions = []
 activeObservationQuestions   = []
