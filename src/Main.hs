@@ -99,6 +99,10 @@ indexHandler :: Handler TT TT ()
 indexHandler = do
   uuid <- nextRandom
   putStrLn $ show uuid
+
+  -- trailer-questionnaire -> href="/trailers/:uuid"
+  -- symptom-questionnaire -> href="/symptoms/:uuid"
+
   render "index"
 
 questionnaireHandler :: Handler TT TT ()
