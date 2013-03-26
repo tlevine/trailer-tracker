@@ -6,7 +6,7 @@ import qualified Data.Map as M
 import Snap
 import Snap.Snaplet.Heist
 import Snap.Util.FileServe
--- import Snap.Extras.CoreUtils
+import Snap.Extras.CoreUtils
 -- import Snap.Extras.TextUtils
 import Heist.Interpreted
 
@@ -97,13 +97,12 @@ symptomQuestionnaire     = M.fromList $ inactiveSymptomQuestions ++ activeSympto
 -- Handling requests
 indexHandler :: Handler TT TT ()
 indexHandler = do
-  uuid <- nextRandom
-  putStrLn $ show uuid
-
-  -- trailer-questionnaire -> href="/trailers/:uuid"
-  -- symptom-questionnaire -> href="/symptoms/:uuid"
-
-  render "index"
+  u <- nextRandom
+  let uuid = U.toString u
+  let questionnaireLinks = [ ("trailer-questionnaire", ("href", "/trailers/" ++ uuid))
+                           , ("symptom-questionnaire", ("href", "/symptoms/" ++ uuid))
+                           ]
+  renderWithSplices "index" $ bindAttributeSplices questionnaireLinks
 
 questionnaireHandler :: Handler TT TT ()
 questionnaireHandler = do
