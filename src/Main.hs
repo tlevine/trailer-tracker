@@ -34,7 +34,7 @@ type QuestionAnswer = (String, Maybe Datetime, QuestionResponse)
 data QuestionResponse
   = Radio ([String], Maybe String, [String])
   | Checkbox (M.Map String Bool)
-  | Textbox String
+  | Textarea String
 
 -- Something handles the answer HTTP (string) response
 type QuestionAsker    = QuestionAnswer -> Snapthingy
@@ -48,12 +48,13 @@ type QuestionnaireTable = M.Map UUID Questionnaire
 toQA :: String -> String -> QuestionResponse -> (String, QuestionAnswer)
 toQA short_name question response = (short_name, (question, Nothing, response))
 
-emptyTextbox :: QuestionResponse
-emptyTextbox = Textbox ""
+-- Make an empty text area.
+emptyTextarea :: QuestionResponse
+emptyTextarea = Textarea ""
 
 -- Make a check box thingy.
--- toCheckbox :: [String] -> Checkbox
-toCheckbox choices = M.fromList $ map (\c -> (c, False)) choices
+toCheckbox :: [String] -> QuestionResponse
+toCheckbox choices = Checkbox $ M.fromList $ map (\c -> (c, False)) choices
 
 -- Make a radio button thingy.
 toRadio :: [String] -> QuestionResponse
@@ -62,22 +63,22 @@ toRadio choices = Radio (choices, Nothing, [])
 activeObservationQuestions   = []
 inactiveObservationQuestions = []
 
-activeSymptomQuestions   = [ toQA "zipcode" "Zip Code" emptyTextbox
-                           , toQA "email" "Email Address" emptyTextbox
+activeSymptomQuestions   = [ toQA "zipcode" "Zip Code" emptyTextarea
+                           , toQA "email" "Email Address" emptyTextarea
                            , toQA "house.type" "Which of the following describes your FEMA housing unit?" $ toRadio ["Travel Trailer", "Park Model", "Mobile Home"]
-                           , toQA "make" "What is the make of your housing unit?" emptyTextbox
-                           , toQA "vin" "What is the VIN number or HUD number of your housing unit? (pop out on where they can find these numbers and what the difference between the two are)" emptyTextbox
-                           , toQA "tested" "Have you tested your trailer for formaldehyde before?" emptyTextbox
-                           , toQA "how.many.people" "How many people live in the FEMA trailer or mobile home with you?" emptyTextbox
-                           , toQA "air.quality" "What concerns do you have about the quality of the air in your FEMA trailer?" emptyTextbox
-                           , toQA "health.issues" "Have you developed any health issues since moving into the FEMA trailer?" emptyTextbox
-                           , toQA "symptoms" "If so, what symptoms are your symptoms?" emptyTextbox
-                           , toQA "symptom.causes" "Which of these symptoms do you believe are NOT caused by air quality issues? Please list the symptom and what you think it might be caused by." emptyTextbox
-                           , toQA "respiratory" "Does anyone in your home have asthma or other respiratory health issues? If so, how severe were these issues before living in the trailer? and after moving into the trailer?" emptyTextbox
-                           , toQA "other.effects" "Are there other effects of the air in your home on your health and well-being (social—embarrassment, not inviting people over or psychological—nonstop worrying, depression)?" emptyTextbox
-                           , toQA "change.in.health" "Please compare your overall health before moving into the mobile home to your current health." emptyTextbox
-                           , toQA "off.gassing" "Do you worry about off-gassing from specific components of your home? If so please describe." emptyTextbox
-                           , toQA "change.in.air.quality" "Does the quality of your indoor air change from time to time? If so what leads to changes in indoor air-quality?" emptyTextbox
+                           , toQA "make" "What is the make of your housing unit?" emptyTextarea
+                           , toQA "vin" "What is the VIN number or HUD number of your housing unit? (pop out on where they can find these numbers and what the difference between the two are)" emptyTextarea
+                           , toQA "tested" "Have you tested your trailer for formaldehyde before?" emptyTextarea
+                           , toQA "how.many.people" "How many people live in the FEMA trailer or mobile home with you?" emptyTextarea
+                           , toQA "air.quality" "What concerns do you have about the quality of the air in your FEMA trailer?" emptyTextarea
+                           , toQA "health.issues" "Have you developed any health issues since moving into the FEMA trailer?" emptyTextarea
+                           , toQA "symptoms" "If so, what symptoms are your symptoms?" emptyTextarea
+                           , toQA "symptom.causes" "Which of these symptoms do you believe are NOT caused by air quality issues? Please list the symptom and what you think it might be caused by." emptyTextarea
+                           , toQA "respiratory" "Does anyone in your home have asthma or other respiratory health issues? If so, how severe were these issues before living in the trailer? and after moving into the trailer?" emptyTextarea
+                           , toQA "other.effects" "Are there other effects of the air in your home on your health and well-being (social—embarrassment, not inviting people over or psychological—nonstop worrying, depression)?" emptyTextarea
+                           , toQA "change.in.health" "Please compare your overall health before moving into the mobile home to your current health." emptyTextarea
+                           , toQA "off.gassing" "Do you worry about off-gassing from specific components of your home? If so please describe." emptyTextarea
+                           , toQA "change.in.air.quality" "Does the quality of your indoor air change from time to time? If so what leads to changes in indoor air-quality?" emptyTextarea
                            ]
 inactiveSymptomQuestions = []
 
@@ -99,7 +100,7 @@ observationHandler = do
 ttInit :: SnapletInit TT TT
 ttInit = makeSnaplet "Trailer Tracker" "Track inhabitable FEMA trailers" Nothing $ do
   h <- nestSnaplet "heist" heist $ heistInit "templates"
-  -- modifyHeistState $ bindAttributeSplices [("main-textbox", mainTextboxAttributeSplice)]
+  -- modifyHeistState $ bindAttributeSplices [("main-textarea", mainTextareaAttributeSplice)]
   addRoutes [ ("images", serveDirectory "static/images")
             , ("stylesheets", serveDirectory "static/stylesheets")
             , ("questionnaires/a", questionnaireHandler)
