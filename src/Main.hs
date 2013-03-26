@@ -53,19 +53,19 @@ emptyTextarea :: QuestionResponse
 emptyTextarea = Textarea ""
 
 -- Make a check box thingy.
-toCheckbox :: [String] -> QuestionResponse
-toCheckbox choices = Checkbox $ M.fromList $ map (\c -> (c, False)) choices
+emptyCheckbox :: [String] -> QuestionResponse
+emptyCheckbox choices = Checkbox $ M.fromList $ map (\c -> (c, False)) choices
 
 -- Make a radio button thingy.
-toRadio :: [String] -> QuestionResponse
-toRadio choices = Radio (choices, Nothing, [])
+emptyRadio :: [String] -> QuestionResponse
+emptyRadio choices = Radio (choices, Nothing, [])
 
 activeObservationQuestions   = []
 inactiveObservationQuestions = []
 
 activeSymptomQuestions   = [ toQA "zipcode" "Zip Code" emptyTextarea
                            , toQA "email" "Email Address" emptyTextarea
-                           , toQA "house.type" "Which of the following describes your FEMA housing unit?" $ toRadio ["Travel Trailer", "Park Model", "Mobile Home"]
+                           , toQA "house.type" "Which of the following describes your FEMA housing unit?" $ emptyRadio ["Travel Trailer", "Park Model", "Mobile Home"]
                            , toQA "make" "What is the make of your housing unit?" emptyTextarea
                            , toQA "vin" "What is the VIN number or HUD number of your housing unit? (pop out on where they can find these numbers and what the difference between the two are)" emptyTextarea
                            , toQA "tested" "Have you tested your trailer for formaldehyde before?" emptyTextarea
