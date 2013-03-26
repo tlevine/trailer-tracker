@@ -18,11 +18,17 @@ instance HasHeist TT where
   heistLens = subSnaplet heist
 
 
-type Answer k = (Datetime, k)
+type Answer k = (String, Datetime, k)
+-- Question text, datetime, result
 
 -- Saved
 type QuestionnaireTable = M.Map UUID Questionnaire
 type Questionnaire = M.Map String Answer
+
+-- These are the ks for the answer. They present the question too
+type Radio = ([String], [String], [String])
+type Checkbox = M.Map String Bool
+type Textbox = String
 
 inactiveObservationQuestions = [
                                ]
