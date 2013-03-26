@@ -44,7 +44,7 @@ type QuestionListener = QuestionAnswer -> String -> QuestionAnswer
 type Questionnaire      = M.Map String QuestionAnswer
 type QuestionnaireTable = M.Map UUID Questionnaire
 
--- Make a question/answer
+-- Make an unanswered question/answer
 toQA :: String -> String -> QuestionResponse -> (String, QuestionAnswer)
 toQA short_name question response = (short_name, (question, Nothing, response))
 
