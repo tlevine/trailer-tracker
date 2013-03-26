@@ -18,20 +18,21 @@ instance HasHeist TT where
   heistLens = subSnaplet heist
 
 
-type Answer k = (String, Datetime, k)
 -- Question text, datetime, result
+type QuestionAnswer a = (String, Datetime, a)
 
-type Question = (String, String -> k) ???
-How do people automatically generate forms in Snap???
-
--- Saved
-type QuestionnaireTable = M.Map UUID Questionnaire
-type Questionnaire = M.Map String Answer
-
--- These are the ks for the answer. They present the question too
+-- These are the a types for the question/answer. They present the question too
 type Radio = ([String], [String], [String])
 type Checkbox = M.Map String Bool
 type Textbox = String
+
+-- Something handles the answer HTTP (string) response
+type QuestionAsker a    = QuestionAnswer a -> Snapthingy
+type QuestionListener a = QuestionAnswer a -> String -> QuestionAnswer a
+
+-- Saved
+type QuestionnaireTable = M.Map UUID Questionnaire
+type Questionnaire      = M.Map String QuestionAnswer
 
 inactiveObservationQuestions = [
                                ]
