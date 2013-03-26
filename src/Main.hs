@@ -19,7 +19,8 @@ instance HasHeist TT where
 
 
 -- Question text, datetime, result
-type QuestionAnswer a = (String, Datetime, a)
+type QuestionAnswer a = (String, a)
+type DatestampedQuestionAnswer a = (String, Datetime, a)
 
 -- These are the a types for the question/answer. They present the question too
 type Radio = ([String], [String], [String])
@@ -34,36 +35,38 @@ type QuestionListener a = QuestionAnswer a -> String -> QuestionAnswer a
 type QuestionnaireTable = M.Map UUID Questionnaire
 type Questionnaire      = M.Map String QuestionAnswer
 
-inactiveObservationQuestions = [
-                               ]
-activeObservationQuestions   = [
-                               ]
+-- Make a question/answer
+toQA :: String -> String -> a -> QuestionAnswer a
+toQA short_name question responses = (short_name, (question, responses))
 
-inactiveSymptomQuestions = [
-                           ]
-activeSymptomQuestions   = [ ("zipcode", "Zip Code")
-                           , ("email", "Email Address")
-                           , ("house.type", "Which of the following describes your FEMA housing unit?")
-                              -- 1.Travel Trailer
-                              -- 2. Park Model
-                              -- 3. Mobile Home
-                           , ("make", "What is the make of your housing unit?")
-                           , ("vin", "What is the VIN number or HUD number of your housing unit? (pop out on where they can find these numbers and what the difference between the two are)")
-                           , ("tested", "Have you tested your trailer for formaldehyde before?")
-                           , ("how.many.people", "How many people live in the FEMA trailer or mobile home with you?")
-                           , ("air.quality", "What concerns do you have about the quality of the air in your FEMA trailer?")
-                           , ("health.issues", "Have you developed any health issues since moving into the FEMA trailer?")
-                           , ("symptoms", "If so, what symptoms are your symptoms?")
-                           , ("symptom.causes", "Which of these symptoms do you believe are NOT caused by air quality issues? Please list the symptom and what you think it might be caused by.")
-                           , ("respiratory", "Does anyone in your home have asthma or other respiratory health issues? If so, how severe were these issues before living in the trailer? and after moving into the trailer?")
-                           , ("other.effects", "Are there other effects of the air in your home on your health and well-being (social—embarrassment, not inviting people over or psychological—nonstop worrying, depression)?")
-                           , ("change.in.health", "Please compare your overall health before moving into the mobile home to your current health.")
-                           , ("off.gassing", "Do you worry about off-gassing from specific components of your home? If so please describe.")
-                           , ("change.in.air.quality", "Does the quality of your indoor air change from time to time? If so what leads to changes in indoor air-quality?")
+-- Make a check box thingy.
+toCheckbox :: [String] -> Checkbox
+toCheckbox choices = M.fromList $ map (\c -> (c, False)) choices
+
+inactiveObservationQuestions = []
+activeObservationQuestions   = []
+
+inactiveSymptomQuestions = []
+activeSymptomQuestions   = [ toQA "zipcode" "Zip Code" ""
+                           , toQA "email" "Email Address" ""
+                           , toQA "house.type" "Which of the following describes your FEMA housing unit?" $ toCheckbox ["Travel Trailer", "Park Model" "Mobile Home"]
+                           , toQA "make" "What is the make of your housing unit?" ""
+                           , toQA "vin" "What is the VIN number or HUD number of your housing unit? (pop out on where they can find these numbers and what the difference between the two are)" ""
+                           , toQA "tested" "Have you tested your trailer for formaldehyde before?" ""
+                           , toQA "how.many.people" "How many people live in the FEMA trailer or mobile home with you?" ""
+                           , toQA "air.quality" "What concerns do you have about the quality of the air in your FEMA trailer?" ""
+                           , toQA "health.issues" "Have you developed any health issues since moving into the FEMA trailer?" ""
+                           , toQA "symptoms" "If so, what symptoms are your symptoms?" ""
+                           , toQA "symptom.causes" "Which of these symptoms do you believe are NOT caused by air quality issues? Please list the symptom and what you think it might be caused by." ""
+                           , toQA "respiratory" "Does anyone in your home have asthma or other respiratory health issues? If so, how severe were these issues before living in the trailer? and after moving into the trailer?" ""
+                           , toQA "other.effects" "Are there other effects of the air in your home on your health and well-being (social—embarrassment, not inviting people over or psychological—nonstop worrying, depression)?" ""
+                           , toQA "change.in.health" "Please compare your overall health before moving into the mobile home to your current health." ""
+                           , toQA "off.gassing" "Do you worry about off-gassing from specific components of your home? If so please describe." ""
+                           , toQA "change.in.air.quality" "Does the quality of your indoor air change from time to time? If so what leads to changes in indoor air-quality?" ""
                            ]
 
 observationQuestionnaire = M.fromList $ inactiveObservationQuestions ++ activeObservationQuestions
-symptomQuestionnaire = M.fromList $ inactiveSymptomQuestions ++ activeSymptomQuestions
+symptomQuestionnaire     = M.fromList $ inactiveSymptomQuestions ++ activeSymptomQuestions
 
 indexHandler :: Handler TT TT ()
 indexHandler = do
