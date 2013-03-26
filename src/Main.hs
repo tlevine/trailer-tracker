@@ -56,7 +56,7 @@ emptyTextbox = Textbox ""
 toCheckbox choices = M.fromList $ map (\c -> (c, False)) choices
 
 -- Make a radio button thingy.
-toRadio :: [Text] -> QuestionResponse
+toRadio :: [String] -> QuestionResponse
 toRadio choices = Radio (choices, Nothing, [])
 
 activeObservationQuestions   = []
@@ -64,7 +64,7 @@ inactiveObservationQuestions = []
 
 activeSymptomQuestions   = [ toQA "zipcode" "Zip Code" emptyTextbox
                            , toQA "email" "Email Address" emptyTextbox
-                           , toQA "house.type" "Which of the following describes your FEMA housing unit?" $ toRadio ["Travel Trailer", "Park Model" "Mobile Home"]
+                           , toQA "house.type" "Which of the following describes your FEMA housing unit?" $ toRadio ["Travel Trailer", "Park Model", "Mobile Home"]
                            , toQA "make" "What is the make of your housing unit?" emptyTextbox
                            , toQA "vin" "What is the VIN number or HUD number of your housing unit? (pop out on where they can find these numbers and what the difference between the two are)" emptyTextbox
                            , toQA "tested" "Have you tested your trailer for formaldehyde before?" emptyTextbox
