@@ -35,6 +35,7 @@ data QuestionResponse
   = Radio ([String], Maybe String, [String])
   | Checkbox (M.Map String Bool)
   | Textarea String
+  deriving (Show)
 
 -- Something handles the answer HTTP (string) response
 type QuestionAsker    = QuestionAnswer -> Snapthingy
@@ -82,9 +83,15 @@ activeSymptomQuestions   = [ toQA "zipcode" "Zip Code" emptyTextarea
                            ]
 inactiveSymptomQuestions = []
 
--- observationQuestionnaire = M.fromList $ inactiveObservationQuestions ++ activeObservationQuestions
--- symptomQuestionnaire     = M.fromList $ inactiveSymptomQuestions ++ activeSymptomQuestions
 
+-- Questionnaire maps
+observationQuestionnaire :: Questionnaire
+observationQuestionnaire = M.fromList $ inactiveObservationQuestions ++ activeObservationQuestions
+
+symptomQuestionnaire     :: Questionnaire
+symptomQuestionnaire     = M.fromList $ inactiveSymptomQuestions ++ activeSymptomQuestions
+
+-- Handling requests
 indexHandler :: Handler TT TT ()
 indexHandler = do
   render "index"
@@ -97,6 +104,7 @@ observationHandler :: Handler TT TT ()
 observationHandler = do
   render "observation"
 
+-- Combining everything
 ttInit :: SnapletInit TT TT
 ttInit = makeSnaplet "Trailer Tracker" "Track inhabitable FEMA trailers" Nothing $ do
   h <- nestSnaplet "heist" heist $ heistInit "templates"
