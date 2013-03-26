@@ -8,13 +8,16 @@ import Snap.Snaplet.Heist
 import Snap.Util.FileServe
 -- import Snap.Extras.CoreUtils
 -- import Snap.Extras.TextUtils
+import Heist.Interpreted
+
 import Control.Lens
 -- import Data.Text
 -- import Data.Text.Encoding
 import Data.Monoid
-import Heist.Interpreted
 
-type UUID = String
+import Data.UUID.V1 (nextUUID)
+import Data.UUID    (toString)
+
 type Datetime = Integer
 type Snapthingy = ()
 
@@ -120,5 +123,10 @@ ttInit = makeSnaplet "Trailer Tracker" "Track inhabitable FEMA trailers" Nothing
 
 main :: IO ()
 main = do
+--uuid <- nextUUID
+--putStrLn $ show uuid
+--uuidstr <- case uuid of
+--  Nothing -> "oops"
+--  Just UUID -> toString uuid
   (_, site, _) <- runSnaplet Nothing ttInit
   quickHttpServe site
