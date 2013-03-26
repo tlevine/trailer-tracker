@@ -54,7 +54,7 @@ toCheckbox choices = M.fromList $ map (\c -> (c, False)) choices
 
 -- Make a radio button thingy.
 toRadio :: [String] -> Radio
-toRadio choices = (choices, Nothing, [])
+toRadio choices = (choices, Nothing, []) :: Radio
 
 activeObservationQuestions   = []
 inactiveObservationQuestions = []
