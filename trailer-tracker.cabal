@@ -29,6 +29,6 @@ executable trailer-tracker
 --                   , text         >= 0.11
                      , uuid         >= 1.2.9
   extensions: OverloadedStrings
-            , TemplateHaskell
+--          , TemplateHaskell
 --          , FlexibleInstances
 --          , ScopedTypeVariables

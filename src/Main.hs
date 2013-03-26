@@ -1,3 +1,7 @@
+{-# LANGUAGE TemplateHaskell #-}
+
+import qualified Data.Map as M
+
 import Snap
 import Snap.Snaplet.Heist
 import Snap.Util.FileServe
@@ -9,6 +13,10 @@ import Control.Lens
 import Data.Monoid
 import Heist.Interpreted
 
+type UUID = String
+type Datetime = Integer
+type Snapthingy = ()
+
 data TT
   = TT { _heist :: Snaplet (Heist TT)
        }
@@ -19,23 +27,24 @@ instance HasHeist TT where
 
 
 -- Question text, datetime, result
-type QuestionAnswer a = (String, Maybe Datetime, a)
+type QuestionAnswer = (String, Maybe Datetime, QuestionType)
 
 -- These are the a types for the question/answer. They present the question too
+data QuestionType = Radio | Checkbox | Textbox
 type Radio = ([String], Maybe String, [String])
 type Checkbox = M.Map String Bool
 type Textbox = String
 
 -- Something handles the answer HTTP (string) response
-type QuestionAsker a    = QuestionAnswer a -> Snapthingy
-type QuestionListener a = QuestionAnswer a -> String -> QuestionAnswer a
+type QuestionAsker    = QuestionAnswer -> Snapthingy
+type QuestionListener = QuestionAnswer -> String -> QuestionAnswer
 
 -- Saved
-type QuestionnaireTable = M.Map UUID Questionnaire
 type Questionnaire      = M.Map String QuestionAnswer
+type QuestionnaireTable = M.Map UUID Questionnaire
 
 -- Make a question/answer
-toQA :: String -> String -> a -> QuestionAnswer a
+toQA :: QuestionType => String -> String -> QuestionType -> QuestionAnswer
 toQA short_name question responses = (short_name, (question, Nothing, responses))
 
 -- Make a check box thingy.
@@ -43,16 +52,15 @@ toCheckbox :: [String] -> Checkbox
 toCheckbox choices = M.fromList $ map (\c -> (c, False)) choices
 
 -- Make a radio button thingy.
-toCheckbox :: [String] -> Radio
-toCheckbox choices = (choices, Nothing, [])
+toRadio :: [String] -> Radio
+toRadio choices = (choices, Nothing, [])
 
-inactiveObservationQuestions = []
 activeObservationQuestions   = []
+inactiveObservationQuestions = []
 
-inactiveSymptomQuestions = []
 activeSymptomQuestions   = [ toQA "zipcode" "Zip Code" ""
                            , toQA "email" "Email Address" ""
-                           , toQA "house.type" "Which of the following describes your FEMA housing unit?" $ toCheckbox ["Travel Trailer", "Park Model" "Mobile Home"]
+                           , toQA "house.type" "Which of the following describes your FEMA housing unit?" $ toRadio ["Travel Trailer", "Park Model" "Mobile Home"]
                            , toQA "make" "What is the make of your housing unit?" ""
                            , toQA "vin" "What is the VIN number or HUD number of your housing unit? (pop out on where they can find these numbers and what the difference between the two are)" ""
                            , toQA "tested" "Have you tested your trailer for formaldehyde before?" ""
@@ -67,6 +75,7 @@ activeSymptomQuestions   = [ toQA "zipcode" "Zip Code" ""
                            , toQA "off.gassing" "Do you worry about off-gassing from specific components of your home? If so please describe." ""
                            , toQA "change.in.air.quality" "Does the quality of your indoor air change from time to time? If so what leads to changes in indoor air-quality?" ""
                            ]
+inactiveSymptomQuestions = []
 
 observationQuestionnaire = M.fromList $ inactiveObservationQuestions ++ activeObservationQuestions
 symptomQuestionnaire     = M.fromList $ inactiveSymptomQuestions ++ activeSymptomQuestions
