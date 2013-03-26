@@ -56,7 +56,7 @@ emptyTextbox = Textbox ""
 toCheckbox choices = M.fromList $ map (\c -> (c, False)) choices
 
 -- Make a radio button thingy.
-toRadio :: [String] -> QuestionResponse
+toRadio :: [Text] -> QuestionResponse
 toRadio choices = Radio (choices, Nothing, [])
 
 activeObservationQuestions   = []
