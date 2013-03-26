@@ -97,14 +97,18 @@ symptomQuestionnaire     = M.fromList $ inactiveSymptomQuestions ++ activeSympto
 -- Handling requests
 indexHandler :: Handler TT TT ()
 indexHandler = do
+  uuid <- nextRandom
+  putStrLn $ show uuid
   render "index"
 
 questionnaireHandler :: Handler TT TT ()
 questionnaireHandler = do
+  uuid <- readParam "uuid"
   render "questionnaire"
 
 observationHandler :: Handler TT TT ()
 observationHandler = do
+  uuid <- readParam "uuid"
   render "observation"
 
 -- Combining everything
@@ -114,8 +118,8 @@ ttInit = makeSnaplet "Trailer Tracker" "Track inhabitable FEMA trailers" Nothing
   -- modifyHeistState $ bindAttributeSplices [("main-textarea", mainTextareaAttributeSplice)]
   addRoutes [ ("images", serveDirectory "static/images")
             , ("stylesheets", serveDirectory "static/stylesheets")
-            , ("questionnaires/a", questionnaireHandler)
-            , ("observations/a", observationHandler)
+            , ("questionnaires/:uuid", questionnaireHandler)
+            , ("observations/:uuid", observationHandler)
             , ("", indexHandler)
             ]
   return $ TT { _heist = h
@@ -123,7 +127,5 @@ ttInit = makeSnaplet "Trailer Tracker" "Track inhabitable FEMA trailers" Nothing
 
 main :: IO ()
 main = do
-  uuid <- nextRandom
-  putStrLn $ show uuid
   (_, site, _) <- runSnaplet Nothing ttInit
   quickHttpServe site
