@@ -1,4 +1,5 @@
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 import qualified Data.Map as M
 
@@ -27,13 +28,13 @@ instance HasHeist TT where
 
 
 -- Question text, datetime, result
-type QuestionAnswer = (String, Maybe Datetime, QuestionType)
+type QuestionAnswer = (String, Maybe Datetime, QuestionResponse)
 
 -- These are the a types for the question/answer. They present the question too
-data QuestionType = Radio | Checkbox | Textbox
 type Radio = ([String], Maybe String, [String])
 type Checkbox = M.Map String Bool
 type Textbox = String
+data QuestionResponse = Radio | Checkbox | Textbox
 
 -- Something handles the answer HTTP (string) response
 type QuestionAsker    = QuestionAnswer -> Snapthingy
@@ -44,7 +45,7 @@ type Questionnaire      = M.Map String QuestionAnswer
 type QuestionnaireTable = M.Map UUID Questionnaire
 
 -- Make a question/answer
-toQA :: String -> String -> QuestionType -> QuestionAnswer
+toQA :: String -> String -> QuestionResponse -> (String, QuestionAnswer)
 toQA short_name question responses = (short_name, (question, Nothing, responses))
 
 -- Make a check box thingy.
