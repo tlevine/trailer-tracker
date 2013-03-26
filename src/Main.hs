@@ -44,7 +44,7 @@ type Questionnaire      = M.Map String QuestionAnswer
 type QuestionnaireTable = M.Map UUID Questionnaire
 
 -- Make a question/answer
-toQA :: QuestionType => String -> String -> QuestionType -> QuestionAnswer
+toQA :: String -> String -> QuestionType -> QuestionAnswer
 toQA short_name question responses = (short_name, (question, Nothing, responses))
 
 -- Make a check box thingy.
