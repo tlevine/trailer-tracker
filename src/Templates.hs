@@ -56,7 +56,9 @@ base body = H.docTypeHtml $ do
       H.div ! A.id "body" $ body
       H.footer ! A.class_ "sixteen columns" $ do
         H.hr
-        H.p "Read more."
+        H.p $ do
+          H.a ! A.href "#" $  "Read more"
+          "."
     --	container 
     --	End Document
     -- ================================================== 
