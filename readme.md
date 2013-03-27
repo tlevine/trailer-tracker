@@ -61,3 +61,62 @@ The baseline data comes from the federal government
 * If I POST a new trailer, it is reflected in the /trailers map data.
 * If I submit a form but the session is expired or otherwise bad, I am allowed to log in or register and then see the data again.
     (This situation might not come up because of how little you actually need to be authenticate for.)
+
+## Ideas from talking with Nick on March 27
+* Use IP address
+  * Hmm maybe cookies
+    * Consider cookie policies
+    * Display the policy only in European Union
+  * He worries about the chemical industry or resellers trying to fuck with us.
+  * At least log everything.
+* "Track" a trailer
+  * After tracking, send to symptoms so there is no interruption
+  * or another trailer
+* Use the wide format with dummy variables for checkboxes (multiple columns).
+* Show _your_ trailer's story _after_ you submit information about the trailer.
+  * Make them do all of the trailer questions
+  * Make them do some more?
+* Link the symptom and trailer questionnaires for one respondent.
+* But getting other peoples' trailers is interesting.
+  * People are sort of "vigilante".
+* Multiple people in the family
+* The other data is a baseline for
+  * starting the stories
+  * starting the map
+* Map filtering
+  * Movements
+  * Sale date
+  * Depend on how users use the site?
+    * Beta test on mailing lists before writing press releases
+  * Highlight different segments
+    * Types of sales: auctions, resales, &c.
+    * Time
+    * On indian reservations, oil fields, &c.
+    * Whether people's health diminished
+    * A single trailer, staging area, &c.
+  * Refund program (duplicated VIN in spreadsheet)
+  * Press release specific to New Orleans
+
+* About variatons symptoms
+  * On one sheet of plywood, there can be a three-fold difference in emissions depending on where you test.
+  * Variability within components
+  * Nobody's done it by plant + model + time
+  * Jacking up with cinderblocks
+  * Personal data
+
+This is more than FEMA trailers.
+  * Mobile homes are the fastest-growing housing market in America.
+
+Immediate gratification
+  * Track your trailer
+    * Mitigation strategies
+  * Symptoms
+    * Is my trailer a FEMA trailer?
+    * Consumer products
+  * Nick offered free testing for FEMA trailers, and this is how his name got around.
+
+Tracking anything serialized
+  * Weapons
+    * Bullets
+    * Guns
+    * Black market
