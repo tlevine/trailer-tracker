@@ -79,6 +79,23 @@ index uuid = base $ do
     symptomLink = toValue $ "/symptoms/" ++ uuidString
     trailerLink = toValue $ "/trailers/" ++ uuidString
 
+
+-- /{trailers,symptoms}/abc-def-ghi-jkl
+oneQuestion :: String -> String -> QuestionResponse -> H.Html
+oneQuestion questionCode questionText Radio (before, selected, after) = base $ do
+  form ! enctype "multipart/form-data" ! B.method "PATCH" ! action 
+    B.label questionCode >> select 
+  where
+    button = do
+      input ! type_ "" ! name "greeting" ! size "10"
+
+    buttons = case selected of
+      Nothing -> before ++ after
+      _ -> before ++ (selected:after)
+
+questionnaire Checkbox (M.Map String Bool)
+questionnaire Textarea String
+
 -- A placeholder for prototyping
 placeholder :: String -> H.Html
 placeholder text = base $ do H.p $ toHtml text
