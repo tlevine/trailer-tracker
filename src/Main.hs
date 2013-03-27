@@ -14,6 +14,6 @@ main = simpleHTTP nullConf $ msum [ method GET >> nullDir >> (ok $ toResponse $ 
                                   , dir "me" $ ok $ toResponse $ placeholder "Information like your email address and phone number goes here."
                                   , dir "login" $ ok $ toResponse $ placeholder "A log-in form goes here."
                                   , dir "logout" $ ok $ toResponse $ placeholder "You have logged out."
---                                , dir "symptoms"    $ path $ \uuid -> ok $ "Symptom questionnaire " ++ uuid
---                                , dir "trailers"    $ path $ \uuid -> ok $ "Trailer observation "   ++ uuid
+                                  , dir "symptoms"    $ path $ \uuid -> ok $ toResponse $ placeholder $ "Symptom questionnaire " ++ uuid
+                                  , dir "trailers"    $ path $ \uuid -> ok $ toResponse $ placeholder $ "Trailer observation "   ++ uuid
                                   ]
