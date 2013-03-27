@@ -80,6 +80,7 @@ index uuid = base $ do
     trailerLink = toValue $ "/trailers/" ++ uuidString
 
 
+{-
 -- /{trailers,symptoms}/abc-def-ghi-jkl
 oneQuestion :: String -> String -> QuestionResponse -> H.Html
 oneQuestion questionCode questionText Radio (before, selected, after) = base $ do
@@ -95,6 +96,7 @@ oneQuestion questionCode questionText Radio (before, selected, after) = base $ d
 
 questionnaire Checkbox (M.Map String Bool)
 questionnaire Textarea String
+-}
 
 -- A placeholder for prototyping
 placeholder :: String -> H.Html
