@@ -120,3 +120,5 @@ Tracking anything serialized
     * Bullets
     * Guns
     * Black market
+
+People are worried about adding VIN to a list, so explain that it's already on a list.
