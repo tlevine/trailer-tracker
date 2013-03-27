@@ -50,3 +50,14 @@ The baseline data comes from the federal government
       click on “TRACKER” in the menu 
       at the top of the screen.
 
+## Integration tests to be written
+
+* If I submit valid information to the trailer form,
+  * the page submits
+  * I see whatever I expect
+  * I can go to the page again and see the information.
+* If I submit invalid information to the trailer form, I get an appropriate error.
+* The homepage loads leaflet and seems to make a map. (The test probably won't actually run the JavaScript though.)
+* If I POST a new trailer, it is reflected in the /trailers map data.
+* If I submit a form but the session is expired or otherwise bad, I am allowed to log in or register and then see the data again.
+    (This situation might not come up because of how little you actually need to be authenticate for.)
