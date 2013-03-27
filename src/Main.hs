@@ -7,8 +7,16 @@ import Happstack.Server -- (Response, ServerPart, dir, mapServerPartT, look, nul
 import qualified Data.UUID as U
 import Templates
 
+devConf :: Conf
+devConf = Conf { port      = 1418
+               , validator  = Nothing
+               , logAccess = Just logMAccess
+               , timeout = 30
+               , threadGroup = Nothing
+               }
+
 main :: IO ()
-main = simpleHTTP nullConf $ msum [ method GET >> nullDir >> (ok $ toResponse $ index U.nil)
+main = simpleHTTP devConf $ msum [ method GET >> nullDir >> (ok $ toResponse $ index U.nil)
                                   , dir "images"      $ serveDirectory DisableBrowsing [] "../static/images"
                                   , dir "stylesheets" $ serveDirectory DisableBrowsing [] "../static/stylesheets"
                                   , dir "me" $ ok $ toResponse $ placeholder "Information like your email address and phone number goes here."
