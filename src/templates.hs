@@ -10,9 +10,11 @@ import qualified Text.Blaze.Html5.Attributes as A
 import Data.Monoid (mempty)
 import Text.Blaze.Html.Renderer.Utf8 (renderHtml)
 
+import qualified Data.UUID as U
+
 -- Overall template
-base :: H.Html
-base = H.docTypeHtml $ do
+base :: H.Html -> H.Html
+base body = H.docTypeHtml $ do
     H.head $ do
         --  Basic Page Needs
         --   ================================================== 
@@ -45,7 +47,7 @@ base = H.docTypeHtml $ do
                 H.a ! A.href "/login" ! A.class_ "account button" $ "Log in"
                 H.a ! A.href "/me" ! A.class_ "account button" $ "Account"
                 H.hr
-            H.div ! A.id "body" $ mempty
+            H.div ! A.id "body" $ body
             H.footer ! A.class_ "sixteen columns" $ do
                 H.hr
                 H.p "Read more."
@@ -53,5 +55,16 @@ base = H.docTypeHtml $ do
         --  End Document
         -- ================================================== 
 
+index :: U.UUID -> H.Html
+index uuid = base $ do
+    H.div ! A.class_ "actions" $ do
+        H.div ! A.class_ "one-third column" $ do
+            H.a ! A.href "" ! A.class_ "button" $ "Add a trailer"
+        H.div ! A.class_ "one-third column" $ do
+            H.a ! A.href "" ! A.class_ "button" $ "Report symptoms"
+        H.div ! A.class_ "one-third column" $ do
+            H.a ! A.href "#" ! A.class_ "button" $ "Discuss"
+    H.div ! A.class_ "sixteen columns" ! A.id "map" ! A.style "height: 40em; background-color: green;" $ mempty
+
 main = do
-  print $ renderHtml base
+  print $ renderHtml $ base mempty
