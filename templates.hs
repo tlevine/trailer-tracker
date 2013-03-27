@@ -1,4 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
+module Templates
+( base
+) where
 
 import           Text.Blaze.Internal
 import qualified Text.Blaze.Html5 as H
@@ -8,8 +11,8 @@ import Data.Monoid (mempty)
 import Text.Blaze.Html.Renderer.Utf8 (renderHtml)
 
 -- Overall template
-basePage :: H.Html
-basePage = H.docTypeHtml $ do
+base :: H.Html
+base = H.docTypeHtml $ do
     H.head $ do
         --  Basic Page Needs
         --   ================================================== 
@@ -51,4 +54,4 @@ basePage = H.docTypeHtml $ do
         -- ================================================== 
 
 main = do
-  print $ renderHtml basePage
+  print $ renderHtml base
