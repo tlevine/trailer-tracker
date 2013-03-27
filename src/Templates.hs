@@ -63,6 +63,7 @@ base body = H.docTypeHtml $ do
     --	End Document
     -- ================================================== 
 
+-- /
 index :: U.UUID -> H.Html
 index uuid = base $ do
   H.div ! A.class_ "actions" $ do
@@ -78,6 +79,7 @@ index uuid = base $ do
     symptomLink = toValue $ "/symptoms/" ++ uuidString
     trailerLink = toValue $ "/trailers/" ++ uuidString
 
+-- A placeholder for prototyping
 placeholder :: String -> H.Html
 placeholder text = base $ do H.p $ toHtml text
 
