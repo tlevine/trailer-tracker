@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Templates
-( base
+( index
 ) where
 
 -- Templates
