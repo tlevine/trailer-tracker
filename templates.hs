@@ -1,6 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
 
--- http://mschade.me/post/34014291111/html-conditional-comments-with-blaze-html
 import           Text.Blaze.Internal
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
@@ -52,7 +51,6 @@ basePage = H.docTypeHtml $ do
         --  container 
         --  End Document
         -- ================================================== 
-
 
 main = do
   print $ renderHtml basePage
