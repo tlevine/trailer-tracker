@@ -44,6 +44,19 @@ data QuestionResponse
 type QuestionAsker    = QuestionAnswer -> Snapthingy
 type QuestionListener = QuestionAnswer -> String -> QuestionAnswer
 
+
+-- New schema after Wednesday's talk
+data User = User { _id :: Integer
+                 , _email :: String
+                 , _phone :: String
+                 , _answers :: M.Map String QuestionAnswer
+                 }
+type QuestionnaireKey = M.Map U.UUID User
+
+
+
+
+
 -- Saved
 type Questionnaire      = M.Map String QuestionAnswer
 type QuestionnaireTable = M.Map U.UUID Questionnaire
