@@ -51,7 +51,7 @@
             <a href="/me" class="account button">Account</a>
 			<hr />
         </header>
-        <div id="body"><apply-content /></div>
+        <div id="body"></div>
         <footer class="sixteen columns">
             <hr />
             <p>Read more.</p>
