@@ -3,8 +3,6 @@
 import           Text.Blaze.Internal
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
-import qualified Data.ByteString.Char8 as C8
-import qualified Data.Text as T
 
 import Data.Monoid (mempty)
 import Text.Blaze.Html.Renderer.Utf8 (renderHtml)
