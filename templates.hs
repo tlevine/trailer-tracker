@@ -11,35 +11,10 @@ import qualified Data.Text as T
 
 import Data.Monoid (mempty)
 import Text.Blaze.Renderer.Utf8 (renderHtml)
- 
--- | HTML tag with no closing.
-html' :: Html -> Html
-html'  = Parent "html" "<html" ""
- 
--- | Special tag that opens only body but closes both body and html.
-htmlBody :: Html -> Html
-htmlBody  = Parent "body" "<body" "</body></html>"
-
--- | Comment combinator. `if` is included, so only condition is needed. E.g.,
--- > comment "lt IE 7"
-comment     :: String -> Html -> Html
-comment cond = Parent "comment" (ss cond') "<![endif]-->"
-    where cond' = "<!--[if " ++ cond ++ " ]"
-          ss s  = StaticString (s ++) (C8.pack s) (T.pack s)
-
--- | Special set of conditionals for the HTML tag to make Skeleton compatible
--- with all browsers.
-htmlTag :: Html
-htmlTag = do
-  comment "lt IE 7" $ htmlEn ! class_ "ie ie6"
-  comment "IE 7"    $ htmlEn ! class_ "ie ie7"
-  comment "IE 8"    $ htmlEn ! class_ "ie ie8"
-  comment "(gte IE 9)|!(IE)" $ htmlEn
-  where htmlEn = html' ! lang "en" $ ""
 
 -- Overall template
 basePage :: Html
-basePage = docType $ htmlTag $ htmlBody $ do
+basePage = docTypeHtml $ do
     H.head $ do
         --  Basic Page Needs
         --   ================================================== 
@@ -55,7 +30,6 @@ basePage = docType $ htmlTag $ htmlBody $ do
         link ! rel "stylesheet" ! href "/stylesheets/base.css"
         link ! rel "stylesheet" ! href "/stylesheets/skeleton.css"
         link ! rel "stylesheet" ! href "/stylesheets/layout.css"
---      comment "lt IE 9" $ script ! src "http://html5shim.googlecode.com/svn/trunk/html5.js"
         --  Favicons
         -- 	================================================== 
         link ! rel "shortcut icon" ! href "/images/favicon.ico"
