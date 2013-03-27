@@ -15,8 +15,20 @@ devConf = Conf { port      = 1418
                , threadGroup = Nothing
                }
 
+{-
+-- resty "symptoms" symptoms-questionnaire-acid-state-thingy
+restyQuestionnaire :: (MonadPlus m) => String -> Something -> [m a] 
+restyQuestionnaire endpoint table = [ d $ methodM [GET, HEAD] >> ok $ toResponse $ ???
+                                    , d $ method POST >>
+                                    , d $ method PATCH >>
+                                    , d $ method PUT >>
+                                    ]
+  where
+    d = dir endpoint
+-}
+
 main :: IO ()
-main = simpleHTTP devConf $ msum [ method GET >> nullDir >> (ok $ toResponse $ index U.nil)
+main = simpleHTTP devConf $ msum [ methodM [GET, HEAD] >> nullDir >> (ok $ toResponse $ index U.nil)
                                   , dir "images"      $ serveDirectory DisableBrowsing [] "../static/images"
                                   , dir "stylesheets" $ serveDirectory DisableBrowsing [] "../static/stylesheets"
                                   , dir "me" $ ok $ toResponse $ placeholder "Information like your email address and phone number goes here."
