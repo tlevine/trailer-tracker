@@ -1,10 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Templates
 ( index
+, placeholder
 ) where
 
 -- Templates
 import           Text.Blaze                            (toValue)
+import           Text.Blaze.Html                       (toHtml)
 import			 Text.Blaze.Internal
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
@@ -62,8 +64,8 @@ base body = H.docTypeHtml $ do
 index :: U.UUID -> H.Html
 index uuid = base $ do
   H.div ! A.class_ "actions" $ do
---  H.div ! A.class_ "one-third column" $ do
---    H.a ! A.href trailerLink ! A.class_ "button" $ "Add a trailer"
+    H.div ! A.class_ "one-third column" $ do
+      H.a ! A.href trailerLink ! A.class_ "button" $ "Add a trailer"
     H.div ! A.class_ "one-third column" $ do
       H.a ! A.href symptomLink ! A.class_ "button" $ "Report symptoms"
     H.div ! A.class_ "one-third column" $ do
@@ -73,6 +75,9 @@ index uuid = base $ do
     uuidString = U.toString uuid
     symptomLink = toValue $ "/symptoms/" ++ uuidString
     trailerLink = toValue $ "/trailers/" ++ uuidString
+
+placeholder :: String -> H.Html
+placeholder text = base $ do H.p $ toHtml text
 
 main = do
   print $ renderHtml $ base mempty
