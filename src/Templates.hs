@@ -82,16 +82,25 @@ index uuid = base $ do
 
 -- A question for /track
 oneQuestion :: String -> String -> QuestionResponse -> H.Html
-oneQuestion questionCode questionText Radio (before, selected, after) = base $ do
+oneQuestion questionCode questionText Radio (before, selected, after) = do
   H.label ! A.for questionCode $ questionText
   H.select $ do
-    -- [button a b for a b in before]
+    -- [option a b for a b in before]
     -- ...
   where
-    button bValue bText = H.option ! A.name questionCode ! A.value bValue $ bText
+    option value text = H.option ! A.name questionCode ! A.value bValue $ bText
 
-questionnaire Checkbox (M.Map String Bool)
-questionnaire Textarea String
+oneQuestion questionCode questionText Checkbox (M.Map String Bool) = do
+  H.label ! A.for questionCode $ questionText
+  where
+    checkboxBase True  = H.input ! A.checked ""
+    checkboxBase False = H.input 
+    checkbox selected name value text = (checkboxBase selected) ! A.type_ "checkbox" ! A.name name ! A.value value $ text
+
+oneQuestion questionCode questionText Textarea answerText = do
+  H.label ! A.for questionCode $ questionText
+  H.textarea ! A.name questionCode $ answerText
+
 
 -- A placeholder for prototyping
 placeholder :: String -> H.Html
