@@ -15,25 +15,25 @@ devConf = Conf { port      = 1418
                , threadGroup = Nothing
                }
 
-{-
--- resty "symptoms" symptoms-questionnaire-acid-state-thingy
-restyQuestionnaire :: (MonadPlus m) => String -> Something -> [m a] 
-restyQuestionnaire endpoint table = [ d $ methodM [GET, HEAD] >> ok $ toResponse $ ???
-                                    , d $ method POST >>
-                                    , d $ method PATCH >>
-                                    , d $ method PUT >>
-                                    ]
-  where
-    d = dir endpoint
--}
-
 main :: IO ()
 main = simpleHTTP devConf $ msum [ methodM [GET, HEAD] >> nullDir >> (ok $ toResponse $ index U.nil)
+
+                                  -- Static
                                   , dir "images"      $ serveDirectory DisableBrowsing [] "../static/images"
                                   , dir "stylesheets" $ serveDirectory DisableBrowsing [] "../static/stylesheets"
+                               -- , dir "about"   
+
+                                  -- Account
                                   , dir "me" $ ok $ toResponse $ placeholder "Information like your email address and phone number goes here."
                                   , dir "login" $ ok $ toResponse $ placeholder "A log-in form goes here."
                                   , dir "logout" $ ok $ toResponse $ placeholder "You have logged out."
-                                  , dir "symptoms"    $ path $ \uuid -> ok $ toResponse $ placeholder $ "Symptom questionnaire " ++ uuid
-                                  , dir "trailers"    $ path $ \uuid -> ok $ toResponse $ placeholder $ "Trailer observation "   ++ uuid
+
+                                  -- Data, mostly for the map
+                               -- , dir "data" $ ???
+                                  
+                                  -- Redirect and set cookie.
+                                  , dir "track"    $ path $ \uuid -> ok $ toResponse $ placeholder $ "Trailer observation "   ++ uuid
+
+                                  -- Questionnaire
+                                  , dir "track" $ nullDir
                                   ]
