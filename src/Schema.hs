@@ -45,21 +45,20 @@ type QuestionAsker    = QuestionAnswer -> Snapthingy
 type QuestionListener = QuestionAnswer -> String -> QuestionAnswer
 
 
--- New schema after Wednesday's talk
-data User = User { _id :: Integer
-                 , _email :: String
+-- A user links to its questionnaires.
+data User = User { _email :: String
                  , _phone :: String
-                 , _answers :: M.Map String QuestionAnswer
+                 , _trailers :: S.Set U.UUID
+                 , _symptoms :: S.Set U.UUID
                  }
-type QuestionnaireKey = M.Map U.UUID User
 
-
-
-
-
--- Saved
+-- A questionnaire is a map of question codes to question answers.
 type Questionnaire      = M.Map String QuestionAnswer
+
+-- Acidic types
+type UserTable = M.Map Integer User
 type QuestionnaireTable = M.Map U.UUID Questionnaire
+type GuestKeys = M.Map U.UUID User
 
 -- Make an unanswered question/answer
 toQA :: String -> String -> QuestionResponse -> (String, QuestionAnswer)
