@@ -80,23 +80,18 @@ index uuid = base $ do
     trailerLink = toValue $ "/trailers/" ++ uuidString
 
 
-{-
--- /{trailers,symptoms}/abc-def-ghi-jkl
+-- A question for /track
 oneQuestion :: String -> String -> QuestionResponse -> H.Html
 oneQuestion questionCode questionText Radio (before, selected, after) = base $ do
-  form ! enctype "multipart/form-data" ! B.method "PATCH" ! action 
-    B.label questionCode >> select 
+  H.label ! A.for questionCode $ questionText
+  H.select $ do
+    -- [button a b for a b in before]
+    -- ...
   where
-    button = do
-      input ! type_ "" ! name "greeting" ! size "10"
-
-    buttons = case selected of
-      Nothing -> before ++ after
-      _ -> before ++ (selected:after)
+    button bValue bText = H.option ! A.name questionCode ! A.value bValue $ bText
 
 questionnaire Checkbox (M.Map String Bool)
 questionnaire Textarea String
--}
 
 -- A placeholder for prototyping
 placeholder :: String -> H.Html
