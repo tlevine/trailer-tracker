@@ -60,6 +60,12 @@ type UserTable = M.Map Integer User
 type QuestionnaireTable = M.Map U.UUID Questionnaire
 type GuestKeys = M.Map U.UUID User
 
+
+
+-----------------------------------------------------------
+-- Questionnaire
+-----------------------------------------------------------
+
 -- Make an unanswered question/answer
 toQA :: String -> String -> QuestionResponse -> (String, QuestionAnswer)
 toQA short_name question response = (short_name, (question, Nothing, response))
@@ -98,49 +104,8 @@ activeSymptomQuestions   = [ toQA "zipcode" "Zip Code" emptyTextarea
                            ]
 inactiveSymptomQuestions = []
 
-
--- Questionnaire maps
 observationQuestionnaire :: Questionnaire
 observationQuestionnaire = M.fromList $ inactiveObservationQuestions ++ activeObservationQuestions
 
 symptomQuestionnaire     :: Questionnaire
 symptomQuestionnaire     = M.fromList $ inactiveSymptomQuestions ++ activeSymptomQuestions
-
--- Handling requests
-indexHandler :: Handler TT TT ()
-indexHandler = do
-  u <- nextRandom
-  let uuid = U.toString u
-  let questionnaireLinks = [ ("trailer-questionnaire", ("href", "/trailers/" ++ uuid))
-                           , ("symptom-questionnaire", ("href", "/symptoms/" ++ uuid))
-                           ]
-  renderWithSplices "index" $ bindAttributeSplices questionnaireLinks
-
-questionnaireHandler :: Handler TT TT ()
-questionnaireHandler = do
-  uuid <- readParam "uuid"
-  render "questionnaire"
-
-observationHandler :: Handler TT TT ()
-observationHandler = do
-  uuid <- readParam "uuid"
-  render "observation"
-
--- Combining everything
-ttInit :: SnapletInit TT TT
-ttInit = makeSnaplet "Trailer Tracker" "Track inhabitable FEMA trailers" Nothing $ do
-  h <- nestSnaplet "heist" heist $ heistInit "templates"
-  -- modifyHeistState $ bindAttributeSplices [("main-textarea", mainTextareaAttributeSplice)]
-  addRoutes [ ("images", serveDirectory "static/images")
-            , ("stylesheets", serveDirectory "static/stylesheets")
-            , ("questionnaires/:uuid", questionnaireHandler)
-            , ("observations/:uuid", observationHandler)
-            , ("", indexHandler)
-            ]
-  return $ TT { _heist = h
-              }
-
-main :: IO ()
-main = do
-  (_, site, _) <- runSnaplet Nothing ttInit
-  quickHttpServe site
