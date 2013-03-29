@@ -5,7 +5,7 @@ name:                trailer-tracker
 version:             0.0.1
 synopsis:            Track FEMA trailers.
 homepage:            trailertracker.org
-license:             MIT
+license:             AGPL
 license-file:        LICENSE
 author:              Thomas Levine
 maintainer:          occurrence@thomaslevine.com
