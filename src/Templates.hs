@@ -85,26 +85,25 @@ oneQuestion :: String -> String -> QuestionResponse -> H.Html
 oneQuestion questionCode questionText Radio (before, selected, after) = do
   H.label ! A.for questionCode $ questionText
   H.select $ do
-    -- [option a False for a in before]
-    -- [option a True  for a in selected]
-    -- [option a False for a in after]
+    forM_ (option False) before
+    option True selected
+    forM_ (option False) after
   where
     optionBase True  = H.option ! A.selected ""
     optionBase False = H.option 
-    option value selected = optionBase selected ! A.name questionCode ! A.value value $ value
+    option selected value = optionBase selected ! A.name questionCode ! A.value value $ value
 
 oneQuestion questionCode questionText Checkbox checks = do
   H.label ! A.for questionCode $ questionText
-  -- M.mapWithKeys checkbox checks
+  forM_ checkbox $ M.toAscList checks
   where
-    checkboxBase True  = H.input ! A.checked ""
-    checkboxBase False = H.input 
-    checkbox value selected = (checkboxBase selected) ! A.type_ "checkbox" ! A.name questionCade ! A.value value $ value
+    checkboxBase True          = H.input ! A.checked ""
+    checkboxBase False         = H.input 
+    checkbox (value, selected) = (checkboxBase selected) ! A.type_ "checkbox" ! A.name questionCade ! A.value value $ value
 
 oneQuestion questionCode questionText Textarea answerText = do
   H.label ! A.for questionCode $ questionText
   H.textarea ! A.name questionCode $ answerText
-
 
 -- A placeholder for prototyping
 placeholder :: String -> H.Html

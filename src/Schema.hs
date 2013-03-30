@@ -35,7 +35,7 @@ type QuestionAnswer = (String, Maybe Datetime, QuestionResponse)
 
 -- These are the a types for the question/answer. They present the question too
 data QuestionResponse
-  = Radio ([String], Maybe String, [String])
+  = Radio ([String], String, [String])
   | Checkbox (M.Map String Bool)
   | Textarea String
   deriving (Show)
@@ -80,7 +80,7 @@ emptyCheckbox choices = Checkbox $ M.fromList $ map (\c -> (c, False)) choices
 
 -- Make a radio button thingy.
 emptyRadio :: [String] -> QuestionResponse
-emptyRadio choices = Radio (choices, Nothing, [])
+emptyRadio x:xs = Radio ([], x, xs)
 
 activeObservationQuestions   = []
 inactiveObservationQuestions = []
