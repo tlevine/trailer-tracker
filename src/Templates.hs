@@ -89,7 +89,7 @@ index uuid = base $ do
 
 -- A question for /track
 oneQuestion :: String -> String -> QuestionResponse -> H.Html
-oneQuestion questionCode questionText Radio (before, selected, after) = do
+oneQuestion questionCode questionText (Radio (before, selected, after)) = do
   H.label ! A.for questionCode $ questionText
   H.select $ do
     forM_ (option False) before
