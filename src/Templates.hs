@@ -4,19 +4,26 @@ module Templates
 , placeholder
 ) where
 
+-- import qualified Data.Set as S
+import qualified Data.Map as M
+
+
 -- Templates
-import           Text.Blaze                            (toValue)
-import           Text.Blaze.Html                       (toHtml)
+import           Text.Blaze                             (toValue)
+import           Text.Blaze.Html                        (toHtml)
 import			 Text.Blaze.Internal
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
-import           Data.Monoid                           (mempty)
+import           Data.Monoid                            (mempty)
+import           Control.Monad                          (forM_)
 
 -- Other
 import qualified Data.UUID as U
+import           Schema
 
 -- Not really needed
-import           Text.Blaze.Html.Renderer.Utf8         (renderHtml)
+import           Text.Blaze.Html.Renderer.Utf8          (renderHtml)
+
 
 -- Overall template
 base :: H.Html -> H.Html
@@ -99,7 +106,7 @@ oneQuestion questionCode questionText Checkbox checks = do
   where
     checkboxBase True          = H.input ! A.checked ""
     checkboxBase False         = H.input 
-    checkbox (value, selected) = (checkboxBase selected) ! A.type_ "checkbox" ! A.name questionCade ! A.value value $ value
+    checkbox (value, selected) = (checkboxBase selected) ! A.type_ "checkbox" ! A.name questionCode ! A.value value $ value
 
 oneQuestion questionCode questionText Textarea answerText = do
   H.label ! A.for questionCode $ questionText

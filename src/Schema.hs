@@ -1,16 +1,11 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE OverloadedStrings #-}
+module Schema where
 
+import qualified Data.Set as S
 import qualified Data.Map as M
 
-import Snap
-import Snap.Snaplet.Heist
-import Snap.Util.FileServe
-import Snap.Extras.CoreUtils
--- import Snap.Extras.TextUtils
-import Heist.Interpreted
-
-import Control.Lens
+-- import Control.Lens
 -- import Data.Text
 -- import Data.Text.Encoding
 import Data.Monoid
@@ -20,15 +15,6 @@ import qualified Data.UUID as U
 
 type Datetime = Integer
 type Snapthingy = ()
-
-data TT
-  = TT { _heist :: Snaplet (Heist TT)
-       }
-makeLenses ''TT
-
-instance HasHeist TT where
-  heistLens = subSnaplet heist
-
 
 -- Question text, datetime, result
 type QuestionAnswer = (String, Maybe Datetime, QuestionResponse)
@@ -80,7 +66,7 @@ emptyCheckbox choices = Checkbox $ M.fromList $ map (\c -> (c, False)) choices
 
 -- Make a radio button thingy.
 emptyRadio :: [String] -> QuestionResponse
-emptyRadio x:xs = Radio ([], x, xs)
+emptyRadio (x:xs) = Radio ([], x, xs)
 
 activeObservationQuestions   = []
 inactiveObservationQuestions = []
