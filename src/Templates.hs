@@ -100,7 +100,7 @@ oneQuestion questionCode questionText (Radio (before, selected, after)) = do
     optionBase False = H.option 
     option selected value = optionBase selected ! A.name questionCode ! A.value value $ value
 
-oneQuestion questionCode questionText Checkbox checks = do
+oneQuestion questionCode questionText (Checkbox checks) = do
   H.label ! A.for questionCode $ questionText
   forM_ checkbox $ M.toAscList checks
   where
@@ -108,7 +108,7 @@ oneQuestion questionCode questionText Checkbox checks = do
     checkboxBase False         = H.input 
     checkbox (value, selected) = (checkboxBase selected) ! A.type_ "checkbox" ! A.name questionCode ! A.value value $ value
 
-oneQuestion questionCode questionText Textarea answerText = do
+oneQuestion questionCode questionText (Textarea answerText) = do
   H.label ! A.for questionCode $ questionText
   H.textarea ! A.name questionCode $ answerText
 
