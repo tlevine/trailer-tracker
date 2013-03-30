@@ -90,27 +90,29 @@ index uuid = base $ do
 -- A question for /track
 oneQuestion :: String -> String -> QuestionResponse -> H.Html
 oneQuestion questionCode questionText (Radio (before, selected, after)) = do
-  H.label ! A.for questionCode $ questionText
+  H.label ! A.for (toValue questionCode) $ toHtml questionText
   H.select $ do
-    forM_ (option False) before
+  --forM_ (option False) before
     option True selected
-    forM_ (option False) after
+  --forM_ (option False) after
   where
     optionBase True  = H.option ! A.selected ""
     optionBase False = H.option 
-    option selected value = optionBase selected ! A.name questionCode ! A.value value $ value
+    option selected value = optionBase selected ! A.name (toValue questionCode) ! A.value (toValue value) $ toHtml value
 
+{-
 oneQuestion questionCode questionText (Checkbox checks) = do
-  H.label ! A.for questionCode $ questionText
-  forM_ checkbox $ M.toAscList checks
+  H.label ! A.for (toValue questionCode) $ toHtml questionText
+  -- forM_ checkbox $ M.toAscList checks
   where
     checkboxBase True          = H.input ! A.checked ""
     checkboxBase False         = H.input 
-    checkbox (value, selected) = (checkboxBase selected) ! A.type_ "checkbox" ! A.name questionCode ! A.value value $ value
+    checkbox (value, selected) = (checkboxBase selected) ! A.type_ "checkbox" ! A.name (toValue questionCode ) ! A.value (toValue value) $ toHtml value
+-}
 
 oneQuestion questionCode questionText (Textarea answerText) = do
-  H.label ! A.for questionCode $ questionText
-  H.textarea ! A.name questionCode $ answerText
+  H.label ! A.for (toValue questionCode ) $ toHtml questionText
+  H.textarea ! A.name (toValue questionCode ) $ toHtml answerText
 
 -- A placeholder for prototyping
 placeholder :: String -> H.Html
