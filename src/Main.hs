@@ -32,8 +32,10 @@ main = simpleHTTP devConf $ msum [ methodM [GET, HEAD] >> nullDir >> (ok $ toRes
                                -- , dir "data" $ ???
                                   
                                   -- Redirect and set cookie.
+                                  {-
                                   , dir "track"    $ path $ \uuid -> ok $ toResponse $ placeholder $ "Trailer observation "   ++ uuid
 
                                   -- Questionnaire
                                   , dir "track" $ nullDir
+                                  -}
                                   ]
