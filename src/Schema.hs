@@ -64,7 +64,7 @@ updatePost updatedPost = do
 mergeUsers :: 
 mergeUsers guestUser mainUser = 
 
-Darn, I should use IxSet....
+Darn, I should use IxSet so that it can do record-level locks rather than table-level locks.
 -}
 
 
