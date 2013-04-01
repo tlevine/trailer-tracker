@@ -71,21 +71,14 @@ base body = H.docTypeHtml $ do
     -- ================================================== 
 
 -- /
-index :: U.UUID -> H.Html
-index uuid = base $ do
+index :: H.Html
+index = base $ do
   H.div ! A.class_ "actions" $ do
     H.div ! A.class_ "one-third column" $ do
-      H.a ! A.href trailerLink ! A.class_ "button" $ "Add a trailer"
-    H.div ! A.class_ "one-third column" $ do
-      H.a ! A.href symptomLink ! A.class_ "button" $ "Report symptoms"
+      H.a ! A.href trailerLink ! A.class_ "button" $ "Track"
     H.div ! A.class_ "one-third column" $ do
       H.a ! A.href "#" ! A.class_ "button" $ "Discuss"
   H.div ! A.class_ "sixteen columns" ! A.id "map" ! A.style "height: 40em; background-color: green;" $ mempty
-  where
-    uuidString = U.toString uuid
-    symptomLink = toValue $ "/symptoms/" ++ uuidString
-    trailerLink = toValue $ "/trailers/" ++ uuidString
-
 
 -- A question for /track
 oneQuestion :: String -> String -> QuestionResponse -> H.Html
