@@ -30,10 +30,9 @@ type QuestionAsker    = QuestionAnswer -> Snapthingy
 type QuestionListener = QuestionAnswer -> String -> QuestionAnswer
 
 -- A user links to its questionnaires.
-data QuestionnaireId
-  = TrailerId U.UUID
-  | SymptomId U.UUID
+data QuestionnaireId = TrailerId U.UUID | SymptomId U.UUID
 newtype GuestKey = U.UUID
+newtype UserId = U.UUID
 
 data User = User { email :: String
                  , phone :: String
@@ -45,13 +44,31 @@ data User = User { email :: String
 type Questionnaire = M.Map String QuestionAnswer
 
 -- Acidic types
-type Users = M.Map Integer User
+type Users = M.Map UserId User
 type Questionnaires = M.Map QuestionnaireId Questionnaire
 type GuestKeys = M.Map GuestKey User
 
 $(deriveSafeCopy 0 'base ''Users)
 $(deriveSafeCopy 0 'base ''Questionnaires)
 $(deriveSafeCopy 0 'base ''GuestKeys)
+
+{-
+-- http://meadowstalk.com/post/migration-to-acid-state
+updatePost ∷ Post → Update MeadowState ()
+updatePost updatedPost = do
+  meadow ← get
+    put meadow { meadowPosts = updateIx (postId updatedPost) updatedPost (meadowPosts meadow) }
+-}
+
+{-
+mergeUsers :: 
+mergeUsers guestUser mainUser = 
+
+Darn, I should use IxSet....
+-}
+
+
+
 
 
 -----------------------------------------------------------
