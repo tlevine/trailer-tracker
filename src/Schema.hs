@@ -14,7 +14,6 @@ import Data.UUID.V4 (nextRandom)
 import qualified Data.UUID as U
 
 type Datetime = Integer
-type Snapthingy = ()
 
 -- Question text, datetime, result
 type QuestionAnswer = (String, Maybe Datetime, QuestionResponse)
@@ -30,22 +29,29 @@ data QuestionResponse
 type QuestionAsker    = QuestionAnswer -> Snapthingy
 type QuestionListener = QuestionAnswer -> String -> QuestionAnswer
 
-
 -- A user links to its questionnaires.
-data User = User { _email :: String
-                 , _phone :: String
-                 , _trailers :: S.Set U.UUID
-                 , _symptoms :: S.Set U.UUID
-                 }
+data QuestionnaireId
+  = TrailerId U.UUID
+  | SymptomId U.UUID
+newtype GuestKey = U.UUID
+
+data User = User { email :: String
+                 , phone :: String
+                 , trailers :: S.Set TrailerId
+                 , symptoms :: S.Set SymptomId
+                 } deriving (Eq, Ord, Read, Show, Data, Typeable)
 
 -- A questionnaire is a map of question codes to question answers.
-type Questionnaire      = M.Map String QuestionAnswer
+type Questionnaire = M.Map String QuestionAnswer
 
 -- Acidic types
-type UserTable = M.Map Integer User
-type QuestionnaireTable = M.Map U.UUID Questionnaire
-type GuestKeys = M.Map U.UUID User
+type Users = M.Map Integer User
+type Questionnaires = M.Map QuestionnaireId Questionnaire
+type GuestKeys = M.Map GuestKey User
 
+$(deriveSafeCopy 0 'base ''Users)
+$(deriveSafeCopy 0 'base ''Questionnaires)
+$(deriveSafeCopy 0 'base ''GuestKeys)
 
 
 -----------------------------------------------------------
