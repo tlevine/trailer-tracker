@@ -31,8 +31,8 @@ type QuestionListener = QuestionAnswer -> String -> QuestionAnswer
 
 -- A user links to its questionnaires.
 data QuestionnaireId = TrailerId U.UUID | SymptomId U.UUID
-newtype GuestKey = U.UUID
-newtype UserId = U.UUID
+newtype GuestKey = GuestKey U.UUID
+newtype UserId   = UserId   U.UUID
 
 data User = User { email :: String
                  , phone :: String
