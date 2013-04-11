@@ -46,7 +46,7 @@ type Questionnaire = M.Map String QuestionAnswer
 -- Acidic types
 type Users = M.Map UserId User
 type Questionnaires = M.Map QuestionnaireId Questionnaire
-type GuestKeys = M.Map GuestKey User
+type GuestKeys = M.Map GuestKey UserId
 
 $(deriveSafeCopy 0 'base ''Users)
 $(deriveSafeCopy 0 'base ''Questionnaires)
@@ -60,6 +60,34 @@ initialQuestionnaires = M.fromList []
 
 initialGuestKeys :: GuestKeys
 initialGuestKeys = M.fromList []
+
+-----------------------------------------------------------
+-- Queries
+-----------------------------------------------------------
+
+-- Users
+newUser :: UserId -> Update Users UserId
+
+lookupUser :: Query Users UserId
+
+-- How do I do this as one transaction rather than as several?
+mergeUsers :: UserId -> GuestKey -> ...
+-- mergeUsers newUser oldGuestKey
+
+
+-- Anonymity
+lookupGuestKey ::
+
+newGuestKey :: GuestKey -> Update GuestKeys GuestKey
+
+
+-- Questionnaire
+lookupQuestionnaire :: Query Questionnaires QuestionnaireId
+
+answerQuestionnaire :: QuestionnaireId -> Update Questionnaires QuestionnaireId
+
+
+
 
 -----------------------------------------------------------
 -- Questionnaire
