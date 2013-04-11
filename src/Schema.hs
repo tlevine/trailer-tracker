@@ -62,12 +62,12 @@ type Questionnaires = M.Map QuestionnaireId Questionnaire
 $(deriveSafeCopy 0 'base ''People)
 $(deriveSafeCopy 0 'base ''Questionnaires)
 
-initialPeople :: People { users = M.fromList []
-                        , guestKeys = M.fromList []
+initialPeople :: People { users = M.empty
+                        , guestKeys = M.empty
 }
 
 initialGuestKeys :: GuestKeys
-initialGuestKeys = M.fromList []
+initialGuestKeys = M.empty
 
 -----------------------------------------------------------
 -- Queries
@@ -117,15 +117,23 @@ mergeUsers (oldUsers, oldGuestKeys) (anonymousUserId, anonymousUser) (onymousUse
                           , symptoms = S.union (symptoms onymousUser) (symptoms anonymousUser)
                           }
     newUsers = M.delete anonymousUserId
-             $ M.adjust (\_ -> newOnymousUser) onymousUserId
+             $ M.insert newOnymousUser onymousUserId
              $ oldUsers
-    newGuestKeys = M.adjust (\_ -> onymousUserId) oldGuestKeys
+    newGuestKeys = M.insert onymousUserId oldGuestKeys
 
 -- Anonymity
 lookupGuestKey :: Query People GuestKey
 
-newGuest :: GuestKey -> Update People GuestKey
-
+newGuest :: GuestKey -> UserId -> Update People ()
+newGuest guestKey userId =
+  do p@People{..} <- get
+     let newGuestKeys = M.insert guestKey userId guestKeys
+     let newUsers = M.insert userId user users
+     put $ p { users = newUsers, guestKeys = newGuestKeys }
+  where
+    user = AnonymousUser { trailers :: S.empty
+                         , symptoms :: S.empty
+                         } deriving (Eq, Ord, Read, Show, Data, Typeable)
 
 -- Questionnaire
 lookupQuestionnaire QuestionnaireId :: Query Questionnaires (Maybe Questionnaire)
@@ -139,8 +147,8 @@ answerQuestionnaire questionnaireId questionCode questionAnswer =
      case (lookup questionnaireId q) of
        Nothing            -> return Nothing
        Just questionnaire -> do
-         let newQuestionnaire = adjust (\_ -> questionAnswer) questionCode questionnaire
-         let newQuestionnaires = adjust (\_ -> newQuestionnaire) questionnaireId questionnaires
+         let newQuestionnaire = insert questionAnswer questionCode questionnaire
+         let newQuestionnaires = insert newQuestionnaire questionnaireId questionnaires
          put $ newQuestionnaires
          return newQuestionnaire
 
