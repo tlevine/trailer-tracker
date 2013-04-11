@@ -34,11 +34,21 @@ data QuestionnaireId = TrailerId U.UUID | SymptomId U.UUID
 newtype GuestKey = GuestKey U.UUID
 newtype UserId   = UserId   U.UUID
 
-data User = User { email :: String
-                 , phone :: String
-                 , trailers :: S.Set TrailerId
-                 , symptoms :: S.Set SymptomId
-                 } deriving (Eq, Ord, Read, Show, Data, Typeable)
+data User
+  = OnymousUser { trailers :: S.Set TrailerId
+                , symptoms :: S.Set SymptomId
+                } deriving (Eq, Ord, Read, Show, Data, Typeable)
+  | AnonymousUser { email :: String
+                  , phone :: String
+                  , trailers :: S.Set TrailerId
+                  , symptoms :: S.Set SymptomId
+                  } deriving (Eq, Ord, Read, Show, Data, Typeable)
+
+-- Edits to a user: Non-nothings are changed, nothings are ignored,
+-- and sets are combined.
+data UserEdit = UserEdit { email :: Maybe String
+                         , phone :: Maybe String
+                         } deriving (Eq, Ord, Read, Show, Data, Typeable)
 
 -- A questionnaire is a map of question codes to question answers.
 type Questionnaire = M.Map String QuestionAnswer
@@ -63,20 +73,63 @@ initialGuestKeys = M.fromList []
 -- Queries
 -----------------------------------------------------------
 
--- Users
-newUser :: UserId -> Update Users UserId
+-- Make a new user.
+newUser :: UserId -> User -> Update People ()
+newUser userId user =
+  do p@People{..} <- get
+     let newUsers = M.insert userId user users
+     put $ p { users = newUsers, guestKeys = guestKeys }
+     return ()
 
-lookupUser :: Query Users UserId
+-- Edit a user.
+editUser :: UserId -> UserEdit -> Update People User
+editUser userId userEdits =
+  do
 
--- How do I do this as one transaction rather than as several?
-mergeUsers :: UserId -> GuestKey -> ...
--- mergeUsers newUser oldGuestKey
+-- Look up a user's information
+lookupUser :: UserId -> Query People User
+lookupUser userId =
+  do p@People{..} <- get
+     return lookup userId users
+
+-- Merge a guest user with an onymous user.
+mergeUsers :: UserId -> GuestKey -> Update People (Maybe User)
+mergeUsers onymousUserId guestKey =
+  do p@People{..} <- get
+     case (lookup onymousUserId users) of
+       Nothing        -> return Nothing
+       Just oldOnymousUser -> case (lookup guestKey guestKeys) of
+         Nothing        -> return Nothing
+         Just anonymousUserId -> case (lookup anonymousUserId users) of
+           Nothing        -> return Nothing
+           Just anonymousUser -> do
+             let newOnymousUser = onymizeUser anonymousUser oldOnymousUser
+             newUsers = M.delete anonymousUserId
+                      $ M.adjust (\_ -> newOnymousUser) onymousUserId
+             newGuestKeys = M.adjust (\_ -> onymousUserId) guestKeys
+
+             put $ p { users = newUsers, guestKeys = newGuestKeys }
+             return newOnymousUser
+
+-- A pure function to help the above function
+onymizeUser :: AnonymousUser -> OnymousUser -> User
+onymizeUser = anonymousUser onymousUser =
+  User { email = email onymousUser
+       , phone = phone onymousUser
+       , trailers = S.union (trailers onymousUser) (trailers anonymousUser)
+       , symptoms = S.union (symptoms onymousUser) (symptoms anonymousUser)
+  }
+      
+      
+         
+
+  users
 
 
 -- Anonymity
-lookupGuestKey ::
+lookupGuestKey :: Query People GuestKey
 
-newGuestKey :: GuestKey -> Update GuestKeys GuestKey
+newGuest :: GuestKey -> Update People GuestKey
 
 
 -- Questionnaire
