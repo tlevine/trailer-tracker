@@ -52,24 +52,14 @@ $(deriveSafeCopy 0 'base ''Users)
 $(deriveSafeCopy 0 'base ''Questionnaires)
 $(deriveSafeCopy 0 'base ''GuestKeys)
 
-{-
--- http://meadowstalk.com/post/migration-to-acid-state
-updatePost ∷ Post → Update MeadowState ()
-updatePost updatedPost = do
-  meadow ← get
-    put meadow { meadowPosts = updateIx (postId updatedPost) updatedPost (meadowPosts meadow) }
--}
+initialUsers :: Users
+initialUsers = M.fromList []
 
-{-
-mergeUsers :: 
-mergeUsers guestUser mainUser = 
+initialQuestionnaires :: Questionnaires
+initialQuestionnaires = M.fromList []
 
-Darn, I should use IxSet so that it can do record-level locks rather than table-level locks.
--}
-
-
-
-
+initialGuestKeys :: GuestKeys
+initialGuestKeys = M.fromList []
 
 -----------------------------------------------------------
 -- Questionnaire
