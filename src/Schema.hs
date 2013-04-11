@@ -44,12 +44,6 @@ data User
                   , symptoms :: S.Set SymptomId
                   } deriving (Eq, Ord, Read, Show, Data, Typeable)
 
--- Edits to a user: Non-nothings are changed, nothings are ignored,
--- and sets are combined.
-data UserEdit = UserEdit { email :: Maybe String
-                         , phone :: Maybe String
-                         } deriving (Eq, Ord, Read, Show, Data, Typeable)
-
 -- A questionnaire is a map of question codes to question answers.
 type Questionnaire = M.Map String QuestionAnswer
 
@@ -82,7 +76,7 @@ newUser userId user =
      return ()
 
 -- Edit a user.
-editUser :: UserId -> UserEdit -> Update People User
+editUser :: UserId -> blah blah -> Update People User
 editUser userId userEdits =
   do
 
@@ -121,9 +115,15 @@ mergeUsers (oldUsers, oldGuestKeys) (anonymousUserId, anonymousUser) (onymousUse
              $ oldUsers
     newGuestKeys = M.insert onymousUserId oldGuestKeys
 
--- Anonymity
-lookupGuestKey :: Query People GuestKey
+-- Get a user from a guest key.
+lookupGuest GuestKey :: Query People (Maybe User)
+lookupGuest guestKey =
+  do p@People{..} <- get
+     return case (lookup guestKey guestKeys) of
+       Nothing     -> Nothing
+       Just userId -> lookup userId users
 
+-- Make a guest.
 newGuest :: GuestKey -> UserId -> Update People ()
 newGuest guestKey userId =
   do p@People{..} <- get
@@ -134,6 +134,23 @@ newGuest guestKey userId =
     user = AnonymousUser { trailers :: S.empty
                          , symptoms :: S.empty
                          } deriving (Eq, Ord, Read, Show, Data, Typeable)
+
+-- Edit a guest user.
+editGuest  :: GuestKey -> S.Set TrailerId -> S.Set SymptomId -> Update People (Maybe User)
+editGuest guestKey trailerIds symptomIds =
+  do p@People{..} <- get
+     case (lookup guestKey guestKeys) of
+       Nothing     -> Nothing
+       Just userId -> case (lookup userId users) of
+         Nothing     -> Nothing
+         Just user   -> do
+           let newUser = user { trailers = S.union (trailers user) trailerIds
+                              , symptoms = S.union (trailers user) trailerIds
+           }
+           put $ p { users = (M.insert userId newUser users)
+                   , guestKeys = guestKeys
+           }
+           return newUser
 
 -- Questionnaire
 lookupQuestionnaire QuestionnaireId :: Query Questionnaires (Maybe Questionnaire)
@@ -151,9 +168,6 @@ answerQuestionnaire questionnaireId questionCode questionAnswer =
          let newQuestionnaires = insert newQuestionnaire questionnaireId questionnaires
          put $ newQuestionnaires
          return newQuestionnaire
-
-
-
 
 -----------------------------------------------------------
 -- Questionnaire
