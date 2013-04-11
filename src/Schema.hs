@@ -93,8 +93,8 @@ lookupUser userId =
      return lookup userId users
 
 -- Merge a guest user with an onymous user.
-mergeUsers :: UserId -> GuestKey -> Update People (Maybe User)
-mergeUsers onymousUserId guestKey =
+onymizeUser :: UserId -> GuestKey -> Update People (Maybe User)
+onymizeUser onymousUserId guestKey =
   do p@People{..} <- get
      case (lookup onymousUserId users) of
        Nothing        -> return Nothing
@@ -103,28 +103,23 @@ mergeUsers onymousUserId guestKey =
          Just anonymousUserId -> case (lookup anonymousUserId users) of
            Nothing        -> return Nothing
            Just anonymousUser -> do
-             let newOnymousUser = onymizeUser anonymousUser oldOnymousUser
-             newUsers = M.delete anonymousUserId
-                      $ M.adjust (\_ -> newOnymousUser) onymousUserId
-             newGuestKeys = M.adjust (\_ -> onymousUserId) guestKeys
-
+             let (newUsers, newGuestKeys) = mergeUsers (users, guestKeys) (anonymousUserId, oldAnonymousUser) (onymousUserId, onymousUser)
              put $ p { users = newUsers, guestKeys = newGuestKeys }
              return newOnymousUser
 
 -- A pure function to help the above function
-onymizeUser :: AnonymousUser -> OnymousUser -> User
-onymizeUser = anonymousUser onymousUser =
-  User { email = email onymousUser
-       , phone = phone onymousUser
-       , trailers = S.union (trailers onymousUser) (trailers anonymousUser)
-       , symptoms = S.union (symptoms onymousUser) (symptoms anonymousUser)
-  }
-      
-      
-         
-
-  users
-
+mergeUsers :: (Users, GuestKeys) -> (UserId, AnonymousUser -> (UserId, OnymousUser) -> (Users, GuestKeys)
+mergeUsers (oldUsers, oldGuestKeys) (anonymousUserId, anonymousUser) (onymousUserId, onymousUser) = (newUsers, newGuestKeys)
+  where
+    newOnymousUser = User { email = email onymousUser
+                          , phone = phone onymousUser
+                          , trailers = S.union (trailers onymousUser) (trailers anonymousUser)
+                          , symptoms = S.union (symptoms onymousUser) (symptoms anonymousUser)
+                          }
+    newUsers = M.delete anonymousUserId
+             $ M.adjust (\_ -> newOnymousUser) onymousUserId
+             $ oldUsers
+    newGuestKeys = M.adjust (\_ -> onymousUserId) oldGuestKeys
 
 -- Anonymity
 lookupGuestKey :: Query People GuestKey
