@@ -44,19 +44,17 @@ data User = User { email :: String
 type Questionnaire = M.Map String QuestionAnswer
 
 -- Acidic types
-type Users = M.Map UserId User
+data People = People { users :: M.Map UserId User
+                     , guestKeys :: M.Map GuestKey UserId
+                     } deriving (Eq, Ord, Read, Show, Data, Typeable)
 type Questionnaires = M.Map QuestionnaireId Questionnaire
-type GuestKeys = M.Map GuestKey UserId
 
-$(deriveSafeCopy 0 'base ''Users)
+$(deriveSafeCopy 0 'base ''People)
 $(deriveSafeCopy 0 'base ''Questionnaires)
-$(deriveSafeCopy 0 'base ''GuestKeys)
 
-initialUsers :: Users
-initialUsers = M.fromList []
-
-initialQuestionnaires :: Questionnaires
-initialQuestionnaires = M.fromList []
+initialPeople :: People { users = M.fromList []
+                        , guestKeys = M.fromList []
+}
 
 initialGuestKeys :: GuestKeys
 initialGuestKeys = M.fromList []
