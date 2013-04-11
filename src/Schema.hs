@@ -128,9 +128,21 @@ newGuest :: GuestKey -> Update People GuestKey
 
 
 -- Questionnaire
-lookupQuestionnaire :: Query Questionnaires QuestionnaireId
+lookupQuestionnaire QuestionnaireId :: Query Questionnaires (Maybe Questionnaire)
+lookupQuestionnaire questionnaireId = 
+  do q <- get
+     return lookup questionnaireId q
 
-answerQuestionnaire :: QuestionnaireId -> Update Questionnaires QuestionnaireId
+answerQuestionnaire :: QuestionnaireId -> String -> QuestionAnswer -> Update Questionnaires (Maybe Questionnaire)
+answerQuestionnaire questionnaireId questionCode questionAnswer =
+  do q <- get
+     case (lookup questionnaireId q) of
+       Nothing            -> return Nothing
+       Just questionnaire -> do
+         let newQuestionnaire = adjust (\_ -> questionAnswer) questionCode questionnaire
+         let newQuestionnaires = adjust (\_ -> newQuestionnaire) questionnaireId questionnaires
+         put $ newQuestionnaires
+         return newQuestionnaire
 
 
 
