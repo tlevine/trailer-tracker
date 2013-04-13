@@ -37,7 +37,7 @@ newtype UserId   = UserId   U.UUID
 data User
   = OnymousUser { trailers :: S.Set TrailerId
                 , symptoms :: S.Set SymptomId
-                } deriving (Eq, Ord, Read, Show, Data, Typeable)
+                }
   | AnonymousUser { email :: String
                   , phone :: String
                   , trailers :: S.Set TrailerId
@@ -56,7 +56,8 @@ type Questionnaires = M.Map QuestionnaireId Questionnaire
 $(deriveSafeCopy 0 'base ''People)
 $(deriveSafeCopy 0 'base ''Questionnaires)
 
-initialPeople :: People { users = M.empty
+initialPeople :: People
+initialPeople = People { users = M.empty
                         , guestKeys = M.empty
 }
 
@@ -75,10 +76,12 @@ newUser userId user =
      put $ p { users = newUsers, guestKeys = guestKeys }
      return ()
 
+{-
 -- Edit a user.
 editUser :: UserId -> blah blah -> Update People User
 editUser userId userEdits =
   do
+-}
 
 -- Look up a user's information
 lookupUser :: UserId -> Query People User
@@ -86,6 +89,7 @@ lookupUser userId =
   do p@People{..} <- get
      return lookup userId users
 
+{-
 -- Merge a guest user with an onymous user.
 onymizeUser :: UserId -> GuestKey -> Update People (Maybe User)
 onymizeUser onymousUserId guestKey =
@@ -114,14 +118,15 @@ mergeUsers (oldUsers, oldGuestKeys) (anonymousUserId, anonymousUser) (onymousUse
              $ M.insert newOnymousUser onymousUserId
              $ oldUsers
     newGuestKeys = M.insert onymousUserId oldGuestKeys
+-}
 
 -- Get a user from a guest key.
-lookupGuest GuestKey :: Query People (Maybe User)
+lookupGuest :: GuestKey -> Query People (Maybe User)
 lookupGuest guestKey =
   do p@People{..} <- get
-     return case (lookup guestKey guestKeys) of
-       Nothing     -> Nothing
-       Just userId -> lookup userId users
+     case (lookup guestKey guestKeys) of
+       Nothing     -> return Nothing
+       Just userId -> return $ lookup userId users
 
 -- Make a guest.
 newGuest :: GuestKey -> UserId -> Update People ()
@@ -131,9 +136,9 @@ newGuest guestKey userId =
      let newUsers = M.insert userId user users
      put $ p { users = newUsers, guestKeys = newGuestKeys }
   where
-    user = AnonymousUser { trailers :: S.empty
-                         , symptoms :: S.empty
-                         } deriving (Eq, Ord, Read, Show, Data, Typeable)
+    user = AnonymousUser { trailers = S.empty
+                         , symptoms = S.empty
+                         }
 
 -- Edit a guest user.
 editGuest  :: GuestKey -> S.Set TrailerId -> S.Set SymptomId -> Update People (Maybe User)
@@ -153,10 +158,12 @@ editGuest guestKey trailerIds symptomIds =
            return newUser
 
 -- Questionnaire
+{-
 lookupQuestionnaire QuestionnaireId :: Query Questionnaires (Maybe Questionnaire)
 lookupQuestionnaire questionnaireId = 
   do q <- get
      return lookup questionnaireId q
+-}
 
 answerQuestionnaire :: QuestionnaireId -> String -> QuestionAnswer -> Update Questionnaires (Maybe Questionnaire)
 answerQuestionnaire questionnaireId questionCode questionAnswer =
