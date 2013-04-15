@@ -1,6 +1,9 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE DeriveDataTypeable #-}
 module Schema where
+
+import           Data.Data (Data, Typeable)
 
 import qualified Data.Set as S
 import qualified Data.Map as M
@@ -26,11 +29,23 @@ data QuestionResponse
   deriving (Show)
 
 -- Something handles the answer HTTP (string) response
+{-
 type QuestionAsker    = QuestionAnswer -> Snapthingy
 type QuestionListener = QuestionAnswer -> String -> QuestionAnswer
+-}
 
 -- A user links to its questionnaires.
-data QuestionnaireId = TrailerId U.UUID | SymptomId U.UUID
+{-
+data QuestionnaireId
+  = TrailerId U.UUID
+  | SymptomId U.UUID
+  deriving (Show)
+-}
+
+type QuestionnaireId = U.UUID
+type TrailerId = U.UUID
+type SymptomId = U.UUID
+
 newtype GuestKey = GuestKey U.UUID
 newtype UserId   = UserId   U.UUID
 
@@ -42,7 +57,8 @@ data User
                   , phone :: String
                   , trailers :: S.Set TrailerId
                   , symptoms :: S.Set SymptomId
-                  } deriving (Eq, Ord, Read, Show, Data, Typeable)
+                  }
+  deriving (Eq, Ord, Read, Show, Data, Typeable)
 
 -- A questionnaire is a map of question codes to question answers.
 type Questionnaire = M.Map String QuestionAnswer
